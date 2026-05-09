@@ -335,8 +335,6 @@ textarea::placeholder {
   }
 }
 
-
-
 /* Icon container inside a card — cleaner transition */
 .icon-hover {
   transition:
@@ -389,7 +387,6 @@ textarea::placeholder {
   }
 }
 
-/* Images — unified timing */
 @media (hover: hover) {
   img {
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -397,4 +394,270 @@ textarea::placeholder {
   .group:hover img:not(.no-zoom) {
     transform: scale(1.03);
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GSAP ScrollSmoother — Layout wrappers
+   ─────────────────────────────────────────────────────────────────── */
+
+#smooth-wrapper {
+  /* overflow: hidden removed — it was a ScrollSmoother leftover and breaks position:sticky */
+}
+
+#smooth-content {
+  /* will-change: transform removed — breaks position:fixed GSAP pins inside Lenis native mode */
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Brand marquee — infinite scroll ticker
+   ─────────────────────────────────────────────────────────────────── */
+
+.brand-marquee {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  animation: marquee-scroll 28s linear infinite;
+}
+
+.brand-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GSAP-animated elements — set opacity/visibility via JS, not CSS
+   (prevents FOUC while preserving SSR-rendered text)
+   ─────────────────────────────────────────────────────────────────── */
+
+/* 3D perspective for flip animations */
+#about .grid,
+#services .grid,
+#why-choose-us .grid,
+section.bg-black .grid {
+  perspective: 900px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Hero — clip-path text reveal support
+   ─────────────────────────────────────────────────────────────────── */
+
+#hero .overflow-hidden {
+  display: block;
+  overflow: hidden;
+}
+
+/* Hero particle pulse */
+.hero-particle {
+  animation: particle-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes particle-pulse {
+  from {
+    box-shadow: 0 0 4px 0 rgba(247, 227, 38, 0.4);
+  }
+  to {
+    box-shadow: 0 0 10px 3px rgba(247, 227, 38, 0.7);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Stats card hover — top accent bar
+   ─────────────────────────────────────────────────────────────────── */
+
+.stat-card {
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-6px) scale(1.015);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Service card — subtle left border pulse on hover
+   ─────────────────────────────────────────────────────────────────── */
+
+#services .grid > div > div {
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+#services .grid > div > div:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px -12px rgba(247, 227, 38, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WhyChooseUs — card glow trace
+   ─────────────────────────────────────────────────────────────────── */
+
+#why-choose-us .grid > div {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#why-choose-us .grid > div:hover {
+  transform: translateY(-5px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WhyPartner — card glass shimmer
+   ─────────────────────────────────────────────────────────────────── */
+
+section.bg-black .grid > div {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.4s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+
+section.bg-black .grid > div::before {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 60%
+  );
+  transform: skewX(-20deg) translateX(-100%);
+  transition: none;
+}
+
+section.bg-black .grid > div:hover::before {
+  animation: glass-shimmer 0.65s ease forwards;
+}
+
+@keyframes glass-shimmer {
+  0% {
+    transform: skewX(-20deg) translateX(-100%);
+  }
+  100% {
+    transform: skewX(-20deg) translateX(400%);
+  }
+}
+
+section.bg-black .grid > div:hover {
+  transform: translateY(-6px);
+  border-color: rgba(247, 227, 38, 0.2);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Contact cards — yellow ring on hover
+   ─────────────────────────────────────────────────────────────────── */
+
+#contact .grid > div,
+#contact .grid > a {
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease;
+}
+
+#contact .grid > div:hover,
+#contact .grid > a:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 0 0 2px #f7e326,
+    0 20px 40px -10px rgba(0, 0, 0, 0.12);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Lenis smooth scroll — override native scroll behavior
+   ─────────────────────────────────────────────────────────────────── */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Section dividers — subtle yellow rule
+   ─────────────────────────────────────────────────────────────────── */
+
+.section-rule {
+  width: 48px;
+  height: 3px;
+  background: #f7e326;
+  border-radius: 9999px;
+  margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Tabular numbers for counters
+   ─────────────────────────────────────────────────────────────────── */
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Horizontal Cards Scroll Sections
+   ─────────────────────────────────────────────────────────────────── */
+
+/* Horizontal card section background — light warm white */
+section[id="services"],
+section[id="why-choose-us"] {
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f0 100%);
+}
+
+/* Ensure horizontal cards can't cause layout overflow */
+.will-change-transform {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Horizontal card items — GSAP manages opacity */
+.h-card {
+  position: relative;
+}
+
+/* Services stacking cards — initial off-screen state owned by CSS, not React inline style */
+.service-card-offscreen {
+  transform: translateX(100%);
+}
+
+/* WhyChooseUs side-by-side cards — start off-screen right */
+.why-card-offscreen {
+  transform: translateX(100vw);
+}
+
+/* ── Full-viewport section rhythm ── */
+.min-h-screen {
+  min-height: 100vh;
 }

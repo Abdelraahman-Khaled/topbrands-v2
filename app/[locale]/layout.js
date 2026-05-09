@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import I18nProvider from "./components/I18nProvider";
 import { CompanyProvider } from "./components/CompanyProvider";
+import SmoothScroll from "./components/SmoothScroll";
 
 import { locales, defaultLocale } from "./i18n/config";
 import { notFound } from "next/navigation";
@@ -83,13 +84,19 @@ export default async function RootLayout({ children, params }) {
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-        <I18nProvider locale={locale}>
-          <CompanyProvider>
-            <Navbar />
-            {children}
-            <Footer />
-          </CompanyProvider>
-        </I18nProvider>
+        {/* smooth-wrapper / smooth-content required by GSAP ScrollSmoother */}
+        <SmoothScroll />
+        <div id="smooth-wrapper">
+          <div id="smooth-content">
+            <I18nProvider locale={locale}>
+              <CompanyProvider>
+                <Navbar />
+                {children}
+                <Footer />
+              </CompanyProvider>
+            </I18nProvider>
+          </div>
+        </div>
       </body>
     </html>
   );

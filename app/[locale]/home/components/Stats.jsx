@@ -34,7 +34,7 @@ export default function Stats({ data }) {
       iconBg: "bg-gradient-to-br from-[#4B4F54] to-[#3B3E42]",
     },
     {
-      value: data["Stat 3 Value"]?.value  || "",
+      value: data["Stat 3 Value"]?.value || "",
       label: data["Stat 3 Label"]?.value || "",
       icon: (
         <svg width="22" height="28" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">

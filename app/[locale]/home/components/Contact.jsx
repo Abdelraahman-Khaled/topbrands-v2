@@ -74,7 +74,7 @@ export default function Contact({ data }) {
   const submitLabel = data["Form Submit Label"]?.value || t("send_message");
 
   return (
-    <section id="contact" className="py-12 sm:py-24 bg-white relative overflow-hidden">
+    <section id="contact" className="min-h-screen flex flex-col justify-center py-16 bg-white relative overflow-hidden">
       <div className="absolute top-10 right-10 w-72 h-72 bg-[#F7E326]/30 rounded-full blur-3xl"></div>
       <div className="absolute bottom-10 left-10 w-72 h-72 bg-[#F7E326]/30 rounded-full blur-3xl"></div>
 

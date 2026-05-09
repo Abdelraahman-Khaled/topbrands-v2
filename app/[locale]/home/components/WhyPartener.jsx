@@ -76,7 +76,7 @@ export default function WhyPartener({ data, cta }) {
   ].filter(f => f.title);
 
   return (
-    <section className="py-12 sm:py-24 bg-black text-white relative overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-center py-16 bg-black text-white relative overflow-hidden">
       <div className="absolute top-20 left-0 w-96 h-96 bg-[#4B4F54]/30 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#F7E326]/20 rounded-full blur-3xl"></div>
 

@@ -6,7 +6,6 @@ import Contact from "./home/components/Contact";
 import Stats from "./home/components/Stats";
 import WhyPartener from "./home/components/WhyPartener";
 import WhyChooseUs from "./home/components/WhyChooseUs";
-import GlobalCTA from "./components/GlobalCTA"; // For the "looking_for" section
 import { getPageData } from "@/services/home.service";
 
 export default async function HomePage({ params }) {
