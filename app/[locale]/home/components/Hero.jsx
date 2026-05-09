@@ -55,18 +55,24 @@ export default function Hero({ data }) {
         <div className="space-y-6 sm:space-y-8 flex flex-col items-start w-full">
           {/* Badge */}
           {badgeText && (
-            <div className="inline-flex animate-fade-in mb-2 sm:mb-4">
-              <span className="px-[14px] sm:px-[18px] py-[6px] sm:py-[8px] text-white rounded-full text-[12px] sm:text-sm font-bold uppercase tracking-wider border border-2 border-[#F7E326]">
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="flex items-center gap-4 mb-2 sm:mb-4"
+            >
+              <span className="text-xs font-bold tracking-[4px] uppercase font-mono" style={{ color: "rgba(255,255,255,0.5)" }}>
                 {badgeText}
               </span>
-            </div>
+              <div className="w-8 h-0.75 bg-brand-yellow rounded-full" />
+            </motion.div>
           )}
 
           {/* Main Heading */}
           <motion.h1
             initial="hidden"
             animate="visible"
-            className="text-[36px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-bold text-white leading-tight"
+            className="text-[36px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-black text-white leading-tight"
           >
             <div className="overflow-hidden">
               <motion.span variants={headlineRevealVariants} className="block">

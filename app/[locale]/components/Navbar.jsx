@@ -280,58 +280,52 @@ export default function Navbar() {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="fixed inset-0 h-screen w-screen bg-white z-[100] xl:hidden flex flex-col"
+            className="fixed inset-0 h-screen w-screen z-[100] xl:hidden flex flex-col"
+            style={{ background: "#0f0f0f" }}
           >
-            {/* Mobile Menu Header (Logo + Close) */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-              <LocalizedLink
-                href="/"
-                onClick={toggleMenu}
-                className="flex items-center"
-              >
+            {/* Header */}
+            <div className="flex items-center justify-between px-8 py-5 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+              <LocalizedLink href="/" onClick={toggleMenu}>
                 <img
-                  src="/images/logo-mobile.webp"
+                  src="/images/logo.webp"
                   alt="Top Brands"
-                  className="h-9 w-auto object-contain"
+                  className="h-9 w-auto object-contain brightness-0 invert"
                 />
               </LocalizedLink>
               <div className="flex items-center gap-4">
                 <button
                   onClick={toggleLanguage}
-                  className="px-3 py-1 cursor-pointer bg-gray-100 rounded-lg font-bold text-gray-800"
+                  className="px-3 py-1.5 cursor-pointer rounded-lg text-xs font-bold tracking-widest uppercase font-mono border"
+                  style={{ color: "rgba(255,255,255,0.6)", borderColor: "rgba(255,255,255,0.15)" }}
                 >
                   {currentLocale === "en" ? "AR" : "EN"}
                 </button>
-                <button
-                  onClick={toggleMenu}
-                  className="text-4xl text-gray-800 focus:outline-none"
-                >
+                <button onClick={toggleMenu} className="text-3xl focus:outline-none text-white">
                   <i className="ri-close-line"></i>
                 </button>
               </div>
             </div>
 
-            {/* Links and Actions Container */}
-            <div className="flex-1 flex flex-col justify-between px-8 py-10 overflow-y-auto">
-              {/* Main Links */}
-              <div className="flex flex-col space-y-2">
+            {/* Links */}
+            <div className="flex-1 flex flex-col justify-between px-8 py-8 overflow-y-auto">
+              <div className="flex flex-col">
                 {links.map((link) => (
                   <motion.div key={link.key} variants={mobileItemVariants}>
                     {link.sublinks ? (
-                      <div className="flex flex-col border-b border-gray-50">
-                        <div className="flex items-center justify-between group">
+                      <div className="border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+                        <div className="flex items-center justify-between">
                           <LocalizedLink
                             href={link.href}
                             onClick={toggleMenu}
-                            className="text-2xl font-bold text-gray-900 py-4 px-4 flex-1"
+                            className="text-2xl font-black text-white py-5 flex-1 tracking-tight"
                           >
                             {t(link.key)}
                           </LocalizedLink>
                           <button
                             onClick={() => setMobileSubMenuOpen(!mobileSubMenuOpen)}
-                            className="p-4 focus:outline-none"
+                            className="p-3 focus:outline-none"
                           >
-                            <i className={`ri-arrow-down-s-line text-brand-yellow text-3xl transition-transform duration-300 ${mobileSubMenuOpen ? "rotate-180" : ""}`}></i>
+                            <i className={`ri-add-line text-brand-yellow text-2xl transition-transform duration-300 ${mobileSubMenuOpen ? "rotate-45" : ""}`}></i>
                           </button>
                         </div>
                         <AnimatePresence>
@@ -340,19 +334,21 @@ export default function Navbar() {
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: "auto", opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
-                              className="overflow-hidden bg-gray-50/50 rounded-xl"
+                              className="overflow-hidden"
                             >
                               {link.sublinks.map((sublink) => (
                                 <LocalizedLink
                                   key={sublink.key}
                                   href={sublink.href}
                                   onClick={toggleMenu}
-                                  className="text-lg font-bold text-gray-700 py-3 px-8 flex items-center justify-between group border-b border-gray-100 last:border-0"
+                                  className="text-base font-bold py-3 px-4 flex items-center justify-between border-t"
+                                  style={{ color: "rgba(255,255,255,0.5)", borderColor: "rgba(255,255,255,0.06)" }}
                                 >
                                   <span>{t(sublink.key)}</span>
-                                  <i className="ri-arrow-right-s-line text-brand-yellow text-xl"></i>
+                                  <i className="ri-arrow-right-s-line text-brand-yellow rtl:rotate-180"></i>
                                 </LocalizedLink>
                               ))}
+                              <div className="pb-4" />
                             </motion.div>
                           )}
                         </AnimatePresence>
@@ -360,50 +356,55 @@ export default function Navbar() {
                     ) : (
                       <LocalizedLink
                         href={link.href}
-                        className="text-2xl font-bold text-gray-900 py-4 border-b border-gray-50 flex items-center justify-between group px-4"
+                        onClick={toggleMenu}
+                        className="text-2xl font-black text-white py-5 border-b flex items-center justify-between tracking-tight group"
+                        style={{ borderColor: "rgba(255,255,255,0.08)" }}
                       >
                         <span>{t(link.key)}</span>
-                        <motion.i
-                          whileHover={{ x: document.dir === 'rtl' ? -5 : 5 }}
-                          className="ri-arrow-right-s-line text-brand-yellow text-3xl transition-transform group-hover:translate-x-1 rtl:rotate-180  rtl:group-hover:-translate-x-1"
-                        ></motion.i>
+                        <i className="ri-arrow-right-s-line text-brand-yellow text-2xl rtl:rotate-180 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i>
                       </LocalizedLink>
                     )}
                   </motion.div>
                 ))}
               </div>
 
-              {/* Action Buttons */}
-              <div className="mt-12 flex flex-col space-y-2">
-                <motion.div variants={mobileItemVariants} className="space-y-2">
-                  <LocalizedLink
-                    href="/become-a-partner"
-                    className="mask-btn mask-btn--gray-black w-full p-3"
-                  >
-                    <span className="mask-btn__label p-0!" >{t("become_a_partner")}</span>
-                    <span type="button" className="mask-btn__fill" tabIndex={-1} aria-hidden="true">
-                      {t("become_a_partner")}
-                    </span>
-                  </LocalizedLink>
-                  <LocalizedLink
-                    href="/contact"
-                    className="mask-btn mask-btn--yellow-black w-full p-3"
-                  >
-                    <span className="mask-btn__label p-0!">{t("get_in_touch")}</span>
-                    <button type="button" className="mask-btn__fill" tabIndex={-1} aria-hidden="true">
-                      {t("get_in_touch")}
-                    </button>
-                  </LocalizedLink>
-                </motion.div>
-
-                <motion.div
-                  variants={mobileItemVariants}
-                  className="pt-10 text-center"
+              {/* Bottom CTAs */}
+              <div className="pt-10 flex flex-col gap-3">
+                <LocalizedLink
+                  href="/become-a-partner"
+                  onClick={toggleMenu}
+                  className="inline-flex items-center justify-between gap-3 group border-t pt-6"
+                  style={{ borderColor: "rgba(255,255,255,0.08)" }}
                 >
-                  <p className="text-gray-400 text-sm font-medium">
-                    &copy; {new Date().getFullYear()} Top Brands Syria
-                  </p>
-                </motion.div>
+                  <span className="text-sm font-bold tracking-widest uppercase text-white">
+                    {t("become_a_partner")}
+                  </span>
+                  <span className="w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180">
+                    <svg width="10" height="10" viewBox="0 0 11 11" fill="none">
+                      <path d="M8.26615 4.79303L4.61493 1.00382L5.57863 -4.44968e-05L10.8587 5.49998L5.57863 11L4.61493 9.99614L8.26615 6.20692H0V4.79303H8.26615Z" fill="black" />
+                    </svg>
+                  </span>
+                </LocalizedLink>
+
+                <LocalizedLink
+                  href="/contact"
+                  onClick={toggleMenu}
+                  className="inline-flex items-center justify-between gap-3 group border-t pt-6"
+                  style={{ borderColor: "rgba(255,255,255,0.08)" }}
+                >
+                  <span className="text-sm font-bold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.4)" }}>
+                    {t("get_in_touch")}
+                  </span>
+                  <span className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180" style={{ border: "1px solid rgba(255,255,255,0.2)" }}>
+                    <svg width="10" height="10" viewBox="0 0 11 11" fill="none">
+                      <path d="M8.26615 4.79303L4.61493 1.00382L5.57863 -4.44968e-05L10.8587 5.49998L5.57863 11L4.61493 9.99614L8.26615 6.20692H0V4.79303H8.26615Z" fill="rgba(255,255,255,0.4)" />
+                    </svg>
+                  </span>
+                </LocalizedLink>
+
+                <p className="pt-8 text-xs font-mono" style={{ color: "rgba(255,255,255,0.2)" }}>
+                  © {new Date().getFullYear()} Top Brands Syria
+                </p>
               </div>
             </div>
           </motion.div>
