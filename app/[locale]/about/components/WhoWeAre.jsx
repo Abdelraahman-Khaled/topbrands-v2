@@ -1,74 +1,135 @@
-"use client"
-import React from 'react';
-import ScrollReveal from '../../components/ScrollReveal';
-import Counter from '../../components/Counter';
+"use client";
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import Counter from "../../components/Counter";
 
-const WhoWeAre = ({ data }) => {
-    if (!data) return null;
+export default function WhoWeAre({ data }) {
+  const { t } = useTranslation();
 
-    const desc1 = data["Text Element 1"]?.value;
-    const desc2 = data["Text Element 2"]?.value;
-    const heritageLabel = data["Text Element 3"]?.value;
-    const heritageValue = data["Text Element 4"]?.value;
-    const coverageLabel = data["Text Element 5"]?.value;
-    const coverageValue = data["Text Element 6"]?.value;
-    const imageUrl = data.image_url;
+  if (!data) return null;
 
-    return (
-        <section className="py-12 md:py-20 bg-white">
-            <ScrollReveal className="max-w-7xl mx-auto px-8 ">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
-                    <div className="group relative h-[350px] md:h-[600px] rounded-3xl overflow-hidden shadow-2xl cursor-pointer">
-                        <img
-                            src={imageUrl || "/images/about/about section in about page.webp"}
-                            alt={desc1 || "About Us"}
-                            className="w-full h-full object-cover object-right transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-700"></div>
-                    </div>
+  const desc1          = data["Text Element 1"]?.value;
+  const desc2          = data["Text Element 2"]?.value;
+  const heritageLabel  = data["Text Element 3"]?.value;
+  const heritageValue  = data["Text Element 4"]?.value;
+  const coverageLabel  = data["Text Element 5"]?.value;
+  const coverageValue  = data["Text Element 6"]?.value;
+  const imageUrl       = data.image_url;
 
-                    <div className="space-y-8">
-                        {desc1 && (
-                            <p className="text-lg md:text-xl text-brand-charcoal leading-relaxed font-medium">
-                                {desc1}
-                            </p>
-                        )}
-                        {desc2 && (
-                            <p className="text-lg md:text-xl text-brand-charcoal leading-relaxed font-medium">
-                                {desc2}
-                            </p>
-                        )}
+  return (
+    <section className="relative overflow-hidden" style={{ background: "#f7f6f2" }}>
+      <div className="flex flex-col lg:flex-row min-h-[70vh]">
 
-                        <div className="grid md:grid-cols-2 grid-cols-1 gap-6 pt-8">
-                            <div className="group bg-brand-yellow rounded-2xl p-6 transition-all duration-500 hover:bg-brand-jet cursor-pointer hover:shadow-xl hover:-translate-y-1">
-                                <div className="w-12 h-12 flex items-center justify-center bg-brand-jet rounded-xl mb-4 transition-all duration-500 group-hover:bg-brand-yellow">
-                                    <i className="ri-building-line text-2xl text-brand-yellow transition-colors duration-500 group-hover:text-brand-jet"></i>
-                                </div>
-                                <p className="text-sm text-brand-charcoal font-bold mb-1 transition-colors duration-500 group-hover:text-gray-300">
-                                    {heritageLabel}
-                                </p>
-                                <p className="text-2xl font-bold text-brand-jet transition-colors duration-500 group-hover:text-white">
-                                    <Counter value={heritageValue} />
-                                </p>
-                            </div>
+        {/* Left — image panel */}
+        {imageUrl && (
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="relative lg:w-1/2 h-72 lg:h-auto overflow-hidden"
+          >
+            <img
+              src={imageUrl}
+              alt={desc1 || "Who We Are"}
+              className="w-full h-full object-cover"
+            />
+            {/* Subtle right-edge fade on desktop */}
+            <div
+              className="absolute inset-y-0 right-0 w-24 hidden lg:block"
+              style={{ background: "linear-gradient(to right, transparent, #f7f6f2)" }}
+            />
+          </motion.div>
+        )}
 
-                            <div className="group bg-brand-paleblue rounded-2xl p-6 transition-all duration-500 hover:bg-brand-yellow cursor-pointer hover:shadow-xl hover:-translate-y-1">
-                                <div className="w-12 h-12 flex items-center justify-center bg-brand-charcoal rounded-xl mb-4 transition-all duration-500 group-hover:bg-brand-jet">
-                                    <i className="ri-map-pin-line text-2xl text-brand-yellow transition-colors duration-500 group-hover:text-brand-yellow"></i>
-                                </div>
-                                <p className="text-sm text-brand-charcoal font-bold mb-1 transition-colors duration-500 group-hover:text-brand-charcoal">
-                                    {coverageLabel}
-                                </p>
-                                <p className="text-2xl font-bold text-brand-jet transition-colors duration-500 group-hover:text-brand-jet">
-                                    {coverageValue}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ScrollReveal>
-        </section>
-    )
+        {/* Right — text panel */}
+        <div className="lg:w-1/2 flex flex-col justify-center px-10 sm:px-14 lg:px-16 xl:px-20 py-20 lg:py-28">
+
+          <motion.span
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="text-xs font-bold tracking-[4px] uppercase font-mono mb-6 block"
+            style={{ color: "rgba(0,0,0,0.3)" }}
+          >
+            {t("who_we_are", "WHO WE ARE")}
+          </motion.span>
+
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, ease: "easeOut" }}
+            className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full mb-8"
+          />
+
+          <div className="space-y-5 mb-12">
+            {desc1 && (
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="text-base lg:text-lg leading-relaxed"
+                style={{ color: "rgba(0,0,0,0.6)" }}
+              >
+                {desc1}
+              </motion.p>
+            )}
+            {desc2 && (
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+                className="text-base lg:text-lg leading-relaxed"
+                style={{ color: "rgba(0,0,0,0.6)" }}
+              >
+                {desc2}
+              </motion.p>
+            )}
+          </div>
+
+          {/* Stat strips */}
+          <div className="flex flex-col border-t" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
+            {heritageLabel && heritageValue && (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="flex items-center justify-between py-6 border-b"
+                style={{ borderColor: "rgba(0,0,0,0.08)" }}
+              >
+                <span className="text-sm font-bold tracking-widest uppercase font-mono" style={{ color: "rgba(0,0,0,0.4)" }}>
+                  {heritageLabel}
+                </span>
+                <span className="font-black text-brand-jet" style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", letterSpacing: "-0.03em" }}>
+                  <Counter value={heritageValue} />
+                </span>
+              </motion.div>
+            )}
+            {coverageLabel && coverageValue && (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.27 }}
+                className="flex items-center justify-between py-6 border-b"
+                style={{ borderColor: "rgba(0,0,0,0.08)" }}
+              >
+                <span className="text-sm font-bold tracking-widest uppercase font-mono" style={{ color: "rgba(0,0,0,0.4)" }}>
+                  {coverageLabel}
+                </span>
+                <span className="font-black text-brand-jet" style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", letterSpacing: "-0.03em" }}>
+                  {coverageValue}
+                </span>
+              </motion.div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
-
-export default WhoWeAre;

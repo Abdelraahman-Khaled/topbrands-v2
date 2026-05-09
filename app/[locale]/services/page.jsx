@@ -1,7 +1,7 @@
-import HeroSection from "../components/HeroSection";
+import ServicesHero from "./components/ServicesHero";
 import ServicesGrid from "./components/ServicesCards";
 import ExcellenceSection from "./components/ServiceExellence";
-import GlobalCTA from "../components/GlobalCTA";
+import ServicesCTA from "./components/ServicesCTA";
 import { getPageData } from "@/services/home.service";
 
 export default async function ServicesPage({ params }) {
@@ -10,10 +10,10 @@ export default async function ServicesPage({ params }) {
 
   if (!data || !Array.isArray(data)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#0f0f0f" }}>
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-brand-jet mb-4">Error loading content</h1>
-          <p className="text-brand-charcoal">Please try again later.</p>
+          <h1 className="text-2xl font-bold text-white mb-4">Error loading content</h1>
+          <p style={{ color: "rgba(255,255,255,0.4)" }}>Please try again later.</p>
         </div>
       </div>
     );
@@ -21,40 +21,27 @@ export default async function ServicesPage({ params }) {
 
   const findSection = (key) => data.find((s) => s[key])?.[key];
 
-  const heroData = findSection("hero");
-  const excellenceData = findSection("service-exc");
-  const ctaData = findSection("services-cta");
+  const heroData        = findSection("hero");
+  const excellenceData  = findSection("service-exc");
+  const ctaData         = findSection("services-cta");
 
-  // Group all service-specific sections for the grid
   const gridSections = {
-    fmcgDist: findSection("fmcg-dist"),
-    retailTrade: findSection("retail-trade"),
-    brandRep: findSection("brand-rep"),
-    salesExec: findSection("sales-exec"),
-    marketCov: findSection("market-cov"),
-    merchVis: findSection("merch-vis"),
-    importTrade: findSection("import-trade"),
+    fmcgDist:           findSection("fmcg-dist"),
+    retailTrade:        findSection("retail-trade"),
+    brandRep:           findSection("brand-rep"),
+    salesExec:          findSection("sales-exec"),
+    marketCov:          findSection("market-cov"),
+    merchVis:           findSection("merch-vis"),
+    importTrade:        findSection("import-trade"),
     marketIntelligence: findSection("market_intelligence"),
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      {heroData && <HeroSection data={heroData} />}
-
-      {/* Services Grid (Distribution, Retail, etc.) */}
+    <div className="min-h-screen" style={{ background: "#0f0f0f" }}>
+      {heroData && <ServicesHero data={heroData} />}
       <ServicesGrid data={gridSections} />
-
-      {/* Service Excellence Section */}
       {excellenceData && <ExcellenceSection data={excellenceData} />}
-
-      {/* Global CTA Section */}
-      {ctaData && (
-        <GlobalCTA
-          data={ctaData}
-          contact={true}
-        />
-      )}
+      {ctaData && <ServicesCTA data={ctaData} />}
     </div>
   );
 }

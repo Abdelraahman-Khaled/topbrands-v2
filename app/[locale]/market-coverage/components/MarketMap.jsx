@@ -249,99 +249,128 @@ const MarketMap = ({ mapData, areas, locale }) => {
   const isAr = locale === 'ar';
   const [hoveredCity, setHoveredCity] = useState(null);
 
-  const icons = [
-    "ri-building-line", "ri-building-2-line", "ri-building-3-line",
-    "ri-ship-line", "ri-building-4-line", "ri-anchor-line",
-  ];
-
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-white overflow-hidden">
+    <section className="relative overflow-hidden" style={{ background: "#f7f6f2" }}>
       {/* Leaflet CSS */}
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        crossOrigin=""
-      />
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossOrigin="" />
       <style>{`
         .custom-leaflet-tooltip { background:transparent!important; border:none!important; box-shadow:none!important; }
         .custom-leaflet-tooltip::before { display:none!important; }
         .leaflet-tooltip-top.custom-leaflet-tooltip { margin-top:-8px; }
       `}</style>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
-        <div className="grid lg:grid-cols-2 gap-10 md:gap-16 lg:gap-20 items-start">
+      {/* Faint watermark */}
+      <span
+        aria-hidden="true"
+        className="absolute left-0 top-0 font-black leading-none tracking-tighter uppercase select-none pointer-events-none"
+        style={{ fontSize: "clamp(80px, 12vw, 180px)", color: "rgba(0,0,0,0.03)", lineHeight: 1 }}
+      >
+        MAP
+      </span>
 
-          {/* ── Leaflet Map + Overlay ── */}
-          <div className="sticky top-24">
-            <motion.div
+      {/* Header */}
+      <div className="relative z-10 px-10 sm:px-14 lg:px-20 xl:px-28 pt-24 pb-16">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div>
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="text-xs font-bold tracking-[4px] uppercase font-mono mb-6 block"
+              style={{ color: "rgba(0,0,0,0.3)" }}
             >
-              <LeafletMap
-                areas={areas}
-                overlayUrl={mapData?.image_url}
-                isAr={isAr}
-              />
+              {isAr ? "التغطية الجغرافية" : "GEOGRAPHIC COVERAGE"}
+            </motion.span>
 
-              {/* Caption */}
-              <div className="mt-4 bg-white rounded-2xl p-5 shadow-xl border border-gray-100">
-                <p className="text-xs text-brand-charcoal/50 font-bold mb-1 uppercase tracking-widest">
-                  {mapData?.["Text Element 3"]?.value}
-                </p>
-                <p className="text-xl font-black text-black">
-                  {mapData?.["Text Element 2"]?.value}
-                </p>
-              </div>
-            </motion.div>
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full mb-7"
+            />
+
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="font-black leading-[0.88] tracking-tight text-brand-jet"
+              style={{ fontSize: "clamp(2.2rem, 5vw, 5rem)" }}
+            >
+              {mapData?.["Text Element 1"]?.value}
+            </motion.h2>
           </div>
 
-          {/* ── Areas Sidebar ── */}
-          <div className="space-y-10">
-            <div className={`${isAr ? 'text-right' : 'text-left'} space-y-4`}>
-              <h2 className="text-3xl md:text-4xl font-bold text-black leading-tight">
-                {mapData?.["Text Element 1"]?.value}
-              </h2>
-              <div className="w-24 h-2 bg-brand-yellow rounded-full"></div>
-            </div>
+          {mapData?.["Text Element 2"]?.value && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="flex flex-col items-start lg:items-end"
+            >
+              <span className="font-black text-brand-jet" style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", letterSpacing: "-0.04em" }}>
+                {mapData["Text Element 2"].value}
+              </span>
+              <span className="text-xs font-mono font-bold tracking-[3px] uppercase" style={{ color: "rgba(0,0,0,0.35)" }}>
+                {mapData?.["Text Element 3"]?.value}
+              </span>
+            </motion.div>
+          )}
+        </div>
+      </div>
 
-            <StaggerContainer className="space-y-4">
-              {areas.map((area, index) => (
-                <StaggerItem key={index}>
-                  <motion.div
-                    onMouseEnter={() => setHoveredCity(index)}
-                    onMouseLeave={() => setHoveredCity(null)}
-                    className={`rounded-2xl p-5 transition-colors duration-300 border-2 cursor-pointer ${
-                      hoveredCity === index
-                        ? 'bg-brand-charcoal border-brand-charcoal'
-                        : 'bg-brand-paleblue/40 border-transparent hover:border-brand-yellow/60'
-                    }`}
-                  >
-                    <div className={`flex items-center gap-4 ${isAr ? 'flex-row-reverse' : ''}`}>
-                      <div className="w-12 h-12 flex items-center justify-center rounded-xl shrink-0 bg-brand-yellow">
-                        <i className={`${icons[index % icons.length]} text-xl text-black`}></i>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className={`text-lg font-bold transition-colors ${hoveredCity === index ? 'text-white' : 'text-black'}`}>
-                          {area.val0}
-                        </h3>
-                        <p className={`text-sm transition-colors ${hoveredCity === index ? 'text-white/60' : 'text-brand-charcoal/60'}`}>
-                          {area.val1}
-                        </p>
-                      </div>
-                      <div className={`flex items-center gap-2 shrink-0 ${isAr ? 'flex-row-reverse' : ''}`}>
-                        <motion.div
-                          transition={{ repeat: Infinity, duration: 1.5 }}
-                          className="w-2.5 h-2.5 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.7)]"
-                        />
-                        <span className={`text-xs font-bold uppercase tracking-wider ${hoveredCity === index ? 'text-green-400' : 'text-green-600'}`}>
-                          {area.val2}
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
+      {/* Map + Areas */}
+      <div className="relative z-10 border-t" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
+        <div className="flex flex-col lg:flex-row">
+
+          {/* Map panel */}
+          <div className="lg:w-1/2 p-10 sm:p-14 lg:p-16 xl:p-20 border-b lg:border-b-0 lg:border-r" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
+            <div className="sticky top-24">
+              <LeafletMap areas={areas} overlayUrl={mapData?.image_url} isAr={isAr} />
+            </div>
+          </div>
+
+          {/* Areas list */}
+          <div className="lg:w-1/2 flex flex-col divide-y" style={{ "--tw-divide-opacity": 1, borderColor: "rgba(0,0,0,0.08)" }}>
+            {areas.map((area, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                onMouseEnter={() => setHoveredCity(index)}
+                onMouseLeave={() => setHoveredCity(null)}
+                className="group relative flex items-center justify-between px-10 sm:px-14 lg:px-12 xl:px-16 py-6 cursor-pointer overflow-hidden border-b"
+                style={{ borderColor: "rgba(0,0,0,0.06)" }}
+              >
+                {/* Yellow sweep */}
+                <div className="absolute inset-0 origin-left transition-transform duration-400 ease-in-out scale-x-0 group-hover:scale-x-100 pointer-events-none bg-brand-yellow" />
+
+                <div className="relative z-10 flex items-center gap-5">
+                  <span className="font-mono font-bold text-xs tracking-[3px] text-brand-yellow group-hover:text-black/50 transition-colors duration-300">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3 className="font-black text-brand-jet group-hover:text-black transition-colors duration-300" style={{ fontSize: "clamp(1rem, 1.5vw, 1.25rem)" }}>
+                      {area.val0}
+                    </h3>
+                    {area.val1 && (
+                      <p className="text-xs mt-0.5 text-black/40 group-hover:text-black/60 transition-colors duration-300">{area.val1}</p>
+                    )}
+                  </div>
+                </div>
+
+                {area.val2 && (
+                  <span className="relative z-10 text-xs font-bold font-mono tracking-widest uppercase text-green-700 group-hover:text-green-800 transition-colors duration-300">
+                    {area.val2}
+                  </span>
+                )}
+              </motion.div>
+            ))}
           </div>
 
         </div>

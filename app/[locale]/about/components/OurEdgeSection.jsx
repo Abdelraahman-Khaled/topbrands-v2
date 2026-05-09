@@ -1,82 +1,128 @@
-"use client"
-import React from 'react';
-import ScrollReveal from '../../components/ScrollReveal';
-import StaggerContainer from '../../components/StaggerContainer';
-import StaggerItem from '../../components/StaggerItem';
+"use client";
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
-const OurEdgeSection = ({ data }) => {
-    if (!data) return null;
+export default function OurEdgeSection({ data }) {
+  const { t } = useTranslation();
 
-    const headerTitle = data["Element 1"]?.value;
-    const headerSubtitle = data["Element 2"]?.value;
+  if (!data) return null;
 
-    const edges = [
-        {
-            icon: "ri-route-line",
-            title: data["Element 3"]?.value,
-            description: data["Element 4"]?.value,
-            color: "brand-yellow",
-            iconColor: "black"
-        },
-        {
-            icon: "ri-database-2-line",
-            title: data["Element 5"]?.value,
-            description: data["Element 6"]?.value,
-            color: "brand-charcoal",
-            iconColor: "white"
-        },
-        {
-            icon: "ri-team-line",
-            title: data["Element 7"]?.value,
-            description: data["Element 8"]?.value,
-            color: "brand-charcoal",
-            iconColor: "white"
-        },
-        {
-            icon: "ri-line-chart-line",
-            title: data["Element 9"]?.value,
-            description: data["Element 10"]?.value,
-            color: "brand-yellow",
-            iconColor: "black"
-        }
-    ].filter(e => e.title);
+  const headerTitle    = data["Element 1"]?.value;
+  const headerSubtitle = data["Element 2"]?.value;
 
-    return (
-        <section className="py-12 md:py-20 bg-[#DEE3EB]">
-            <div className="max-w-7xl mx-auto px-8 ">
-                <ScrollReveal>
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-brand-jet mb-4">
-                            {headerTitle}
-                        </h2>
-                        <p className="text-lg md:text-xl text-brand-charcoal max-w-3xl mx-auto font-medium">
-                            {headerSubtitle}
-                        </p>
-                    </div>
-                </ScrollReveal>
+  const edges = [
+    { title: data["Element 3"]?.value,  desc: data["Element 4"]?.value },
+    { title: data["Element 5"]?.value,  desc: data["Element 6"]?.value },
+    { title: data["Element 7"]?.value,  desc: data["Element 8"]?.value },
+    { title: data["Element 9"]?.value,  desc: data["Element 10"]?.value },
+  ].filter((e) => e.title);
 
-                <StaggerContainer className="grid md:grid-cols-2 gap-8">
-                    {edges.map((edge, index) => (
-                        <StaggerItem
-                            key={index}
-                            className="group card-hover bg-white rounded-2xl p-6 md:p-8 border-s-3 border-gray-200 hover:border-brand-yellow hover:shadow-lg transition-all duration-500 ease-in-out shadow-sm"
-                        >
-                            <div className={`icon-hover w-14 h-14 flex items-center justify-center bg-${edge.color} rounded-xl mb-6`}>
-                                <i className={`${edge.icon} text-2xl text-${edge.iconColor}`}></i>
-                            </div>
-                            <h3 className="text-2xl font-bold text-brand-jet mb-4">
-                                {edge.title}
-                            </h3>
-                            <p className="text-base text-brand-charcoal leading-relaxed font-medium">
-                                {edge.description}
-                            </p>
-                        </StaggerItem>
-                    ))}
-                </StaggerContainer>
+  return (
+    <section className="relative overflow-hidden" style={{ background: "#0f0f0f" }}>
+
+      {/* Faint watermark */}
+      <span
+        aria-hidden="true"
+        className="absolute left-0 top-0 font-black leading-none tracking-tighter uppercase select-none pointer-events-none"
+        style={{ fontSize: "clamp(80px, 12vw, 180px)", color: "rgba(255,255,255,0.025)", lineHeight: 1 }}
+      >
+        EDGE
+      </span>
+
+      {/* Header */}
+      <div className="relative z-10 px-10 sm:px-14 lg:px-20 xl:px-28 pt-24 pb-0">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-20">
+          <div>
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="text-xs font-bold tracking-[4px] uppercase font-mono mb-6 block"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+            >
+              {t("our_edge", "OUR EDGE")}
+            </motion.span>
+
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full mb-7"
+            />
+
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="font-black leading-[0.88] tracking-tight text-white"
+              style={{ fontSize: "clamp(2.2rem, 5vw, 5rem)" }}
+            >
+              {headerTitle}
+            </motion.h2>
+          </div>
+
+          {headerSubtitle && (
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-base lg:text-lg leading-relaxed lg:max-w-xs"
+              style={{ color: "rgba(255,255,255,0.4)" }}
+            >
+              {headerSubtitle}
+            </motion.p>
+          )}
+        </div>
+      </div>
+
+      {/* Edge grid — full bleed, 2×2 */}
+      <div
+        className="relative z-10 grid grid-cols-1 sm:grid-cols-2 border-t border-l"
+        style={{ borderColor: "rgba(255,255,255,0.07)" }}
+      >
+        {edges.map((e, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5, delay: (i % 2) * 0.1 }}
+            className="group relative flex flex-col border-b border-r overflow-hidden"
+            style={{ borderColor: "rgba(255,255,255,0.07)" }}
+          >
+            {/* Yellow sweep */}
+            <div className="absolute inset-0 origin-left transition-transform duration-500 ease-in-out scale-x-0 group-hover:scale-x-100 pointer-events-none z-0 bg-brand-yellow" />
+
+            <div className="relative z-10 p-10 sm:p-12 lg:p-14 flex flex-col gap-6">
+              {/* Number row */}
+              <div className="flex items-center gap-4">
+                <span className="font-mono font-bold text-xs tracking-[3px] text-brand-yellow group-hover:text-black/50 transition-colors duration-300">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="h-px flex-1 bg-white/10 group-hover:bg-black/15 transition-colors duration-300" />
+              </div>
+
+              {/* Title */}
+              <h3
+                className="font-black leading-tight tracking-tight text-white group-hover:text-black transition-colors duration-300"
+                style={{ fontSize: "clamp(1.4rem, 2.5vw, 2rem)" }}
+              >
+                {e.title}
+              </h3>
+
+              {/* Description */}
+              <p className="text-sm leading-relaxed text-white/45 group-hover:text-black/70 transition-colors duration-300">
+                {e.desc}
+              </p>
             </div>
-        </section>
-    )
+          </motion.div>
+        ))}
+      </div>
+
+    </section>
+  );
 }
-
-export default OurEdgeSection;
-

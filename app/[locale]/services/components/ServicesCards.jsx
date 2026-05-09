@@ -1,117 +1,159 @@
 "use client";
-import React from 'react';
-import { Truck, Store, Award, FastForward, Map, ShoppingCart, Ship, TrendingUp } from 'lucide-react';
-import StaggerContainer from '../../components/StaggerContainer';
-import StaggerItem from '../../components/StaggerItem';
-import ScrollReveal from '../../components/ScrollReveal';
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
-const ServiceCard = ({ icon: Icon, data, isYellow }) => {
-    if (!data) return null;
+const ServiceCard = ({ data, index }) => {
+  if (!data) return null;
 
-    const title = data["Element 1"]?.value;
-    const description = data["Element 2"]?.value;
+  const title       = data["Element 1"]?.value;
+  const description = data["Element 2"]?.value;
 
-    // Extract bullets from Element 3 till Element 6
-    const bullets = Object.keys(data)
-        .filter(key => {
-            const index = parseInt(key.split(" ")[1]);
-            return key.startsWith("Element") && index >= 3 && index <= 6;
-        })
-        .map(key => data[key]?.value)
-        .filter(Boolean);
+  const bullets = Object.keys(data)
+    .filter((k) => {
+      const n = parseInt(k.split(" ")[1]);
+      return k.startsWith("Element") && n >= 3 && n <= 6;
+    })
+    .map((k) => data[k]?.value)
+    .filter(Boolean);
 
-    return (
-        <ScrollReveal>
-            <StaggerItem className="group card-hover flex flex-col gap-5 p-8 md:p-12 rounded-3xl border-s-2  border-gray-200 hover:border-brand-yellow bg-white h-full hover:shadow-lg transition-all duration-500 ease-in-out">
-                {/* Icon with dynamic background */}
-                <div className={`icon-hover w-16 h-16 flex items-center justify-center rounded-2xl shadow-sm ${isYellow ? 'bg-[#F7E326] text-black' : 'bg-[#4B4B4B] text-white'}`}>
-                    <Icon size={30} strokeWidth={2.5} />
-                </div>
+  const num = String(index + 1).padStart(2, "0");
 
-                <div className="space-y-3">
-                    <h3 className="text-3xl font-bold text-black leading-snug tracking-tight">
-                        {title}
-                    </h3>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, delay: (index % 2) * 0.1 }}
+      className="group relative flex flex-col border-b border-r border-white/[0.07]"
+    >
+      {/* Yellow sweep on hover */}
+      <div className="absolute inset-0 origin-left transition-transform duration-500 ease-in-out scale-x-0 group-hover:scale-x-100 pointer-events-none z-0 bg-brand-yellow" />
 
-                    <p className="text-brand-charcoal text-base leading-relaxed font-normal">
-                        {description}
-                    </p>
-                </div>
+      <div className="relative z-10 p-10 sm:p-12 lg:p-14 flex flex-col gap-6 h-full">
 
-                {/* Bullet Points */}
-                {bullets.length > 0 && (
-                    <ul className="space-y-2.5 pt-2">
-                        {bullets.map((bullet, idx) => (
-                            <li key={idx} className="flex items-start gap-3 text-sm text-brand-charcoal font-normal tracking-wide">
-                                <span className={`w-2 h-2 rounded-full shrink-0 mt-1.5 ${isYellow ? 'bg-[#F7E326]' : 'bg-[#4B4B4B]'}`} />
-                                {bullet}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </StaggerItem>
-        </ScrollReveal>
-    );
+        {/* Number + rule row */}
+        <div className="flex items-center gap-4">
+          <span className="font-mono font-bold text-xs tracking-[3px] transition-colors duration-300 text-brand-yellow group-hover:text-black/50">
+            {num}
+          </span>
+          <div className="h-px flex-1 transition-colors duration-300 bg-white/10 group-hover:bg-black/15" />
+        </div>
+
+        {/* Title */}
+        <h3
+          className="font-black leading-tight tracking-tight transition-colors duration-300 text-white group-hover:text-black"
+          style={{ fontSize: "clamp(1.4rem, 2.5vw, 2rem)" }}
+        >
+          {title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-sm leading-relaxed transition-colors duration-300 text-white/45 group-hover:text-black/70">
+          {description}
+        </p>
+
+        {/* Bullets */}
+        {bullets.length > 0 && (
+          <ul className="flex flex-col gap-2.5 mt-auto pt-4 border-t transition-colors duration-300 border-white/[0.07] group-hover:border-black/15">
+            {bullets.map((b, i) => (
+              <li key={i} className="flex items-start gap-3 text-xs leading-relaxed font-medium transition-colors duration-300 text-white/40 group-hover:text-black/65">
+                <span className="w-1 h-1 rounded-full shrink-0 mt-1.5 transition-colors duration-300 bg-brand-yellow group-hover:bg-black/40" />
+                {b}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </motion.div>
+  );
 };
 
-const ServicesGrid = ({ data }) => {
-    if (!data) return null;
+const SERVICES_ORDER = [
+  "fmcgDist",
+  "retailTrade",
+  "brandRep",
+  "salesExec",
+  "marketCov",
+  "merchVis",
+  "importTrade",
+  "marketIntelligence",
+];
 
-    const services = [
-        { key: 'fmcgDist', icon: Truck, isYellow: false },
-        { key: 'retailTrade', icon: Store, isYellow: true },
-        { key: 'brandRep', icon: Award, isYellow: false },
-        { key: 'salesExec', icon: FastForward, isYellow: true },
-        { key: 'marketCov', icon: Map, isYellow: false },
-        { key: 'merchVis', icon: ShoppingCart, isYellow: true },
-        { key: 'importTrade', icon: Ship, isYellow: false },
-        { key: 'marketIntelligence', icon: TrendingUp, isYellow: true },
-    ];
+export default function ServicesGrid({ data }) {
+  const { t } = useTranslation();
 
-    return (
-        <section className="relative w-full py-20 lg:py-28 px-6 overflow-hidden" style={{ background: "rgba(247, 227, 38, 0.08)" }}>
+  if (!data) return null;
 
-            {/* ── Decorative blobs ── */}
-            <div className="absolute -top-24 -left-24 w-96 h-96 bg-brand-yellow/20 rounded-full blur-[100px] pointer-events-none" />
-            <div className="absolute bottom-0 right-0 w-80 h-80 bg-white/40 rounded-full blur-[80px] pointer-events-none" />
+  return (
+    <section className="relative overflow-hidden" style={{ background: "#0f0f0f" }}>
 
-            {/* ── Dot grid (top-right) ── */}
-            <svg className="absolute top-8 right-8 opacity-20 pointer-events-none" width="160" height="160" viewBox="0 0 160 160">
-                {Array.from({ length: 6 }).map((_, row) =>
-                    Array.from({ length: 6 }).map((_, col) => (
-                        <circle key={`${row}-${col}`} cx={col * 28 + 8} cy={row * 28 + 8} r="3" fill="#1a1a1a" />
-                    ))
-                )}
-            </svg>
+      {/* Faint watermark */}
+      <span
+        aria-hidden="true"
+        className="absolute left-0 top-0 font-black leading-none tracking-tighter uppercase select-none pointer-events-none"
+        style={{ fontSize: "clamp(80px, 12vw, 180px)", color: "rgba(255,255,255,0.025)", lineHeight: 1 }}
+      >
+        WHAT WE DO
+      </span>
 
+      {/* Header */}
+      <div className="relative z-10 px-10 sm:px-14 lg:px-20 xl:px-28 pt-24 pb-16">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div>
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="text-xs font-bold tracking-[4px] uppercase font-mono mb-6 block"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+            >
+              {t("our_services", "OUR SERVICES")}
+            </motion.span>
 
-            {/* ── Dot grid (bottom-left) ── */}
-            <svg className="absolute bottom-8 left-8 opacity-20 pointer-events-none" width="160" height="160" viewBox="0 0 160 160">
-                {Array.from({ length: 6 }).map((_, row) =>
-                    Array.from({ length: 6 }).map((_, col) => (
-                        <circle key={`${row}-${col}`} cx={col * 28 + 8} cy={row * 28 + 8} r="3" fill="#1a1a1a" />
-                    ))
-                )}
-            </svg>
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full mb-7"
+            />
 
-            {/* ── Yellow accent ring (centre-right) ── */}
-            <svg className="absolute top-1/2 -right-16 -translate-y-1/2 opacity-15 pointer-events-none" width="260" height="260" viewBox="0 0 260 260">
-                <circle cx="130" cy="130" r="120" fill="none" stroke="#F7E326" strokeWidth="20" strokeDasharray="30 15" />
-            </svg>
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="font-black leading-[0.88] tracking-tight text-white"
+              style={{ fontSize: "clamp(2.2rem, 5vw, 5rem)" }}
+            >
+              {t("what_we_offer", "What We Offer")}
+            </motion.h2>
+          </div>
 
-            {/* ── Grid content ── */}
-            <StaggerContainer className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10">
-                {services.map((service, index) => (
-                    <ServiceCard
-                        key={index}
-                        data={data[service.key]}
-                        icon={service.icon}
-                        isYellow={service.isYellow}
-                    />
-                ))}
-            </StaggerContainer>
-        </section>
-    );
-};
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-base lg:text-lg leading-relaxed lg:max-w-xs"
+            style={{ color: "rgba(255,255,255,0.4)" }}
+          >
+            {t("services_grid_subtitle", "End-to-end solutions tailored to your market.")}
+          </motion.p>
+        </div>
+      </div>
 
-export default ServicesGrid;
+      {/* Grid */}
+      <div
+        className="relative z-10 grid grid-cols-1 sm:grid-cols-2 border-t border-l"
+        style={{ borderColor: "rgba(255,255,255,0.07)" }}
+      >
+        {SERVICES_ORDER.map((key, i) => (
+          <ServiceCard key={key} data={data[key]} index={i} />
+        ))}
+      </div>
+
+    </section>
+  );
+}
