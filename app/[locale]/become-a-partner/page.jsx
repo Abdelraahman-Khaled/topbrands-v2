@@ -364,7 +364,7 @@ export default function BecomePartnerPage() {
               </div>
 
               <div className="mb-10">
-                <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />
+                {RECAPTCHA_SITE_KEY && <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />}
               </div>
 
               {submitStatus === "success" && (

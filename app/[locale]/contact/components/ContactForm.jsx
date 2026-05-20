@@ -161,7 +161,7 @@ const ContactForm = () => {
                 </div>
 
                 <div className="mb-6">
-                    <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />
+                    {RECAPTCHA_SITE_KEY && <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />}
                 </div>
 
                 <button

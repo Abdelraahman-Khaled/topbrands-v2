@@ -268,7 +268,7 @@ export default function Contact({ data }) {
               )}
 
               <div className="md:col-span-2">
-                <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />
+                {RECAPTCHA_SITE_KEY && <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />}
               </div>
 
               <div className="md:col-span-2 pt-2">
