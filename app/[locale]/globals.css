@@ -61,6 +61,24 @@ html {
   *:lang(ar) {
     font-family: "Cairo", sans-serif;
   }
+
+  html:lang(ar) {
+    font-size: 90%;
+  }
+
+  html:lang(ar),
+  body:lang(ar),
+  *:lang(ar) {
+    line-height: 1.9;
+  }
+
+  h1:lang(ar),
+  h2:lang(ar),
+  h3:lang(ar),
+  h4:lang(ar) {
+    line-height: 1.5;
+  }
+
 }
 
 input::placeholder,
@@ -260,6 +278,108 @@ textarea::placeholder {
 /* Duplicate yellow-white rule removed */
 
 /* ######################################### */
+
+/* ════════════════════════════════════════════════════════════════════
+   Circle Expanding Button (.circle-btn)
+   ───────────────────────────────────────────────────────────────── */
+
+.circle-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 11rem;
+  height: 11rem;
+  border-radius: 9999px;
+  background-color: var(--color-brand-charcoal, #4b4f54);
+  overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+.circle-btn:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Expanding circle originating from outer edge */
+.circle-btn__wave {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background-color: var(--color-brand-yellow, #f7e326);
+  transition: transform 0.7s ease-in-out;
+  z-index: 0;
+}
+html[dir="rtl"] .circle-btn__wave,
+[dir="rtl"] .circle-btn__wave {
+  right: auto;
+  left: 0;
+}
+.circle-btn:hover .circle-btn__wave {
+  transform: translateY(-50%) scale(45);
+}
+
+/* Content wrapper */
+.circle-btn__content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+/* Label text */
+.circle-btn__label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  transition: color 0.7s ease-in-out;
+  text-align: start;
+  line-height: 1.25;
+  max-width: 110px;
+}
+.circle-btn:hover .circle-btn__label {
+  color: #000000;
+}
+
+/* SVG Arrow */
+.circle-btn__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-brand-yellow, #f7e326);
+  transition: all 0.7s ease-in-out;
+}
+.circle-btn:hover .circle-btn__icon {
+  color: #000000;
+  transform: translateX(4px);
+}
+/* ── RTL: flip all scale-from-left to scale-from-right ── */
+[dir="rtl"] .origin-left {
+  transform-origin: right center;
+}
+
+html[dir="rtl"] .circle-btn:hover .circle-btn__icon,
+[dir="rtl"] .circle-btn:hover .circle-btn__icon {
+  transform: translateX(-4px) rotate(180deg);
+}
+html[dir="rtl"] .circle-btn__icon,
+[dir="rtl"] .circle-btn__icon {
+  transform: rotate(180deg);
+}
 
 /* ── Keyframes ── */
 
@@ -661,4 +781,12 @@ section[id="why-choose-us"] {
 /* ── Full-viewport section rhythm ── */
 .min-h-screen {
   min-height: 100vh;
+}
+
+/* ── Arabic leading-none override ── */
+@layer utilities {
+  :lang(ar) .leading-none,
+  .leading-none:lang(ar) {
+    line-height: 1.4 !important;
+  }
 }

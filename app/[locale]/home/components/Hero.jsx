@@ -22,8 +22,8 @@ export default function Hero({ data }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-jet">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0 flex h-full w-full ">
-        <div className={`relative w-full lg:w-[60%] h-full ${isRtl ? 'mr-auto' : ''}`}>
+      <div className="absolute inset-0 z-0">
+        <div className={`absolute top-0 ${isRtl ? 'right-0' : 'left-0'} w-full lg:w-[60%] h-full`}>
           {imageUrl && (
             <img
               src={imageUrl}
@@ -37,16 +37,18 @@ export default function Hero({ data }) {
 
       {/* Decorative Gradient overlays */}
       <div
-        className="absolute top-0 right-0 w-[40%] h-full z-0"
+        className={`absolute top-0 ${isRtl ? 'left-0' : 'right-0'} w-[40%] h-full z-0 hidden lg:block`}
         style={{
-          background: "linear-gradient(120deg, #4B4F54 0%, #000000 70%, #F7E326 100%)",
+          background: isRtl
+            ? "linear-gradient(240deg, #4B4F54 0%, #000000 70%, #F7E326 100%)"
+            : "linear-gradient(120deg, #4B4F54 0%, #000000 70%, #F7E326 100%)",
         }}
       ></div>
       <div
-        className="absolute top-0 right-[25%] z-0 w-[4px] h-full"
+        className={`absolute top-0 ${isRtl ? 'left-[25%]' : 'right-[25%]'} z-0 w-1 h-full hidden lg:block`}
         style={{
           background: "linear-gradient(135deg, #F7E32600 0%, #F7E32699 60%, #F7E32600 100%)",
-          transform: "translateX(-50%) rotate(15deg)",
+          transform: `translateX(${isRtl ? '50%' : '-50%'}) rotate(${isRtl ? '-15deg' : '15deg'})`,
         }}
       ></div>
 
@@ -61,7 +63,7 @@ export default function Hero({ data }) {
               transition={{ duration: 0.4 }}
               className="flex items-center gap-4 mb-2 sm:mb-4"
             >
-              <span className="text-xs font-bold tracking-[4px] uppercase font-mono" style={{ color: "rgba(255,255,255,0.5)" }}>
+              <span className="text-xs font-bold tracking-[4px] uppercase font-mono text-brand-yellow" >
                 {badgeText}
               </span>
               <div className="w-8 h-0.75 bg-brand-yellow rounded-full" />
@@ -74,16 +76,16 @@ export default function Hero({ data }) {
             animate="visible"
             className="text-[36px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-black text-white leading-tight"
           >
-            <div className="overflow-hidden">
+            <div className="overflow-hidden pt-2 -mt-2">
               <motion.span variants={headlineRevealVariants} className="block">
                 {title1}
               </motion.span>
             </div>
-            <div className="overflow-hidden">
+            <div className="overflow-hidden pt-2 -mt-2">
               <motion.span
                 variants={headlineRevealVariants}
                 transition={{ delay: 0.2 }}
-                className="text-[#E5E7EB] text-[24px] sm:text-[36px] md:text-[48px] font-semibold block"
+                className="text-brand-yellow text-[24px] sm:text-[36px] md:text-[48px] font-semibold block"
               >
                 {title2}
               </motion.span>
@@ -96,7 +98,7 @@ export default function Hero({ data }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-base sm:text-[18px] md:text-[20px] text-[#F3F4F6] max-w-4xl leading-relaxed font-normal mt-6 sm:mt-8"
+              className="text-base sm:text-[18px] md:text-[20px] text-[#f0f0f0] max-w-4xl leading-relaxed font-normal mt-6 sm:mt-8"
             >
               {subtitle}
             </motion.p>
@@ -107,13 +109,13 @@ export default function Hero({ data }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-start items-start sm:items-center pt-6 sm:pt-8"
+            className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-start items-start sm:items-center pt-6 sm:pt-8 w-full sm:w-auto"
           >
             {button1Text && (
-              <motion.div whileTap={tapButtonVariants} className="w-full">
+              <motion.div whileTap={tapButtonVariants} className="w-full sm:w-auto">
                 <LocalizedLink
                   href="/become-a-partner"
-                  className="mask-btn mask-btn--yellow-black w-full"
+                  className="mask-btn mask-btn--yellow-black w-full sm:w-auto"
                 >
                   <span className="mask-btn__label">{button1Text}</span>
                   <span className="mask-btn__fill" tabIndex={-1} aria-hidden="true">
@@ -124,10 +126,10 @@ export default function Hero({ data }) {
             )}
 
             {button2Text && (
-              <motion.div whileTap={tapButtonVariants} className="w-full">
+              <motion.div whileTap={tapButtonVariants} className="w-full sm:w-auto">
                 <LocalizedLink
                   href="/contact"
-                  className="mask-btn mask-btn--none-white w-full border-2 border-brand-yellow!"
+                  className="mask-btn mask-btn--none-white w-full sm:w-auto border-2 border-brand-yellow!"
                 >
                   <span className="mask-btn__label">{button2Text}</span>
                   <span className="mask-btn__fill" tabIndex={-1} aria-hidden="true">

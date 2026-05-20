@@ -7,7 +7,7 @@ export default function Counter({ value, direction = "up", duration = 3.5, class
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const numericValue = parseFloat(value.toString().replace(/[^0-9.]/g, "")) || 0;
-  const suffix = value.toString().replace(/[0-9.]/g, "");
+  const suffix = value.toString().replace(/[0-9.,]/g, "");
   const prefix = value.toString().split(/[0-9]/)[0] || "";
 
   const motionValue = useMotionValue(direction === "down" ? numericValue : 0);

@@ -184,14 +184,14 @@ function ProductsContent() {
               className="inline-flex items-center space-x-3 px-10 py-4 bg-brand-coral text-white rounded-full font-semibold text-lg hover:brightness-110 transition-all shadow-xl hover:shadow-2xl whitespace-nowrap cursor-pointer"
             >
               <span>Contact Us</span>
-              <i className="ri-arrow-right-line text-xl"></i>
+              <i className="ri-arrow-right-line text-xl rtl:rotate-180"></i>
             </LocalizedLink>
             <LocalizedLink
               href="/brands"
               className="inline-flex items-center space-x-3 px-10 py-4 border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white hover:text-brand-jet transition-all whitespace-nowrap cursor-pointer"
             >
               <span>View Brands</span>
-              <i className="ri-arrow-right-line text-xl"></i>
+              <i className="ri-arrow-right-line text-xl rtl:rotate-180"></i>
             </LocalizedLink>
           </div>
         </div>

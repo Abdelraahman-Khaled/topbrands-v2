@@ -29,11 +29,12 @@ export default async function BrandDetailPage({ params }) {
     );
   }
 
-  const brandProducts = brandData.products || [];
+  const brandProducts = data?.products || [];
+  const brandTitle = brandData.title;
 
   const ctaData = {
-    "CTA Element 1": { value: isAr ? `مهتم بمنتجات ${brandData.title}؟` : `Interested in ${brandData.title}?` },
-    "CTA Element 2": { value: isAr ? `كن شريكاً لنا لجلب مجموعة ${brandData.title} المميزة لعملائك.` : `Partner with us to bring ${brandData.title}'s premium range to your customers.` },
+    "CTA Element 1": { value: isAr ? `مهتم بمنتجات ${brandTitle}؟` : `Interested in ${brandTitle}?` },
+    "CTA Element 2": { value: isAr ? `كن شريكاً لنا لجلب مجموعة ${brandTitle} المميزة لعملائك.` : `Partner with us to bring ${brandTitle}'s premium range to your customers.` },
     "CTA Element 3": { value: isAr ? "تواصل معنا" : "Contact Us" },
     "CTA Element 4": { value: isAr ? "كن شريكاً" : "Become a Partner" },
   };
@@ -42,7 +43,7 @@ export default async function BrandDetailPage({ params }) {
     <div className="min-h-screen" style={{ background: "#0f0f0f" }}>
       <BrandDetailHero brandData={brandData} />
       {brandProducts.length > 0 && (
-        <BrandProducts products={brandProducts} brandTitle={brandData.title} />
+        <BrandProducts products={brandProducts} brandTitle={brandTitle} />
       )}
       <ServicesCTA data={ctaData} />
     </div>

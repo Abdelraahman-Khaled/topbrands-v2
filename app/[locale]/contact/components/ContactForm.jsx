@@ -1,10 +1,14 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import ReCAPTCHA from 'react-google-recaptcha';
+
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 const ContactForm = () => {
     const { t } = useTranslation();
+    const recaptchaRef = useRef(null);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -26,6 +30,11 @@ const ContactForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const recaptchaToken = recaptchaRef.current?.getValue();
+        if (!recaptchaToken) {
+            setSubmitStatus("recaptcha");
+            return;
+        }
         setIsSubmitting(true);
         setSubmitStatus("idle");
 
@@ -33,12 +42,13 @@ const ContactForm = () => {
             const response = await fetch("/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, recaptchaToken }),
             });
 
             if (response.ok) {
                 setSubmitStatus("success");
                 setFormData({ name: "", email: "", phone: "", company: "", subject: "", message: "" });
+                recaptchaRef.current?.reset();
             } else {
                 setSubmitStatus("error");
             }
@@ -143,8 +153,15 @@ const ContactForm = () => {
                         {submitStatus === "error" && (
                             <p className="text-sm text-red-500 font-semibold">{t("error_msg") || "Something went wrong"}</p>
                         )}
+                        {submitStatus === "recaptcha" && (
+                            <p className="text-sm text-red-500 font-semibold">Please complete the reCAPTCHA verification.</p>
+                        )}
                         <p className="text-xs text-brand-charcoal ml-auto">{formData.message.length}/500</p>
                     </div>
+                </div>
+
+                <div className="mb-6">
+                    <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />
                 </div>
 
                 <button

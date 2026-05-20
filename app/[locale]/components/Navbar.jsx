@@ -90,10 +90,8 @@ export default function Navbar() {
       ]
     },
     { key: "brands", href: "/brands" },
-    // { key: "products", href: "/products" },
     { key: "coverage", href: "/market-coverage" },
-    { key: "blog", href: "/blog" },
-    { key: "contact", href: "/contact" }
+    { key: "gallery", href: "/gallery" }
   ];
 
   const menuVariants = {
@@ -135,7 +133,7 @@ export default function Navbar() {
       variants={navContainerVariants}
       className={`fixed top-0 left-0 right-0 z-50 transition-[background,padding,shadow] duration-500 ease-out  
         ${isScrolled
-          ? "bg-black/85  backdrop-blur-xl shadow-lg py-4"
+          ? "bg-[#4B4F54]  backdrop-blur-xl shadow-lg py-4"
           : "bg-transparent border-transparent py-5"
         } ${isOpen ? "bg-white/95 !backdrop-blur-3xl" : ""}`}
     >

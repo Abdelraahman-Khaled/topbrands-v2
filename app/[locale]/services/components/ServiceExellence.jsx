@@ -2,26 +2,14 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-const FeatureCol = ({ num, title, description, index }) => (
+const FeatureCol = ({ title, description, index }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-40px" }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
     className="flex flex-col justify-end px-10 sm:px-12 lg:px-14 pt-12 pb-16 border-r"
-    style={{ borderColor: "rgba(0,0,0,0.08)" }}
   >
-    {/* Faint number */}
-    <span
-      aria-hidden="true"
-      className="font-black leading-none mb-6 select-none"
-      style={{ fontSize: "clamp(3rem, 6vw, 6rem)", color: "rgba(0,0,0,0.07)", letterSpacing: "-0.04em" }}
-    >
-      {num}
-    </span>
-
-    {/* Yellow rule */}
-    <div className="w-8 h-0.75 bg-brand-yellow rounded-full mb-5" />
 
     {/* Title */}
     <h3
@@ -31,8 +19,11 @@ const FeatureCol = ({ num, title, description, index }) => (
       {title}
     </h3>
 
+    {/* Yellow rule */}
+    <div className="w-8 h-0.75 bg-brand-yellow rounded-full mb-5" />
+
     {/* Description */}
-    <p className="text-sm leading-relaxed" style={{ color: "rgba(0,0,0,0.45)" }}>
+    <p className="text-base leading-relaxed text-brand-charcoal" >
       {description}
     </p>
   </motion.div>
@@ -43,7 +34,7 @@ export default function ExcellenceSection({ data }) {
 
   if (!data) return null;
 
-  const title    = data["Element 1"]?.value;
+  const title = data["Element 1"]?.value;
   const subtitle = data["Element 2"]?.value;
 
   const features = [
@@ -56,29 +47,25 @@ export default function ExcellenceSection({ data }) {
   return (
     <section className="relative overflow-hidden" style={{ background: "#f7f6f2" }}>
 
-      {/* Faint watermark */}
-      <span
-        aria-hidden="true"
-        className="absolute right-0 top-0 font-black leading-none tracking-tighter uppercase select-none pointer-events-none"
-        style={{ fontSize: "clamp(80px, 12vw, 180px)", color: "rgba(0,0,0,0.03)", lineHeight: 1 }}
-      >
-        EXCELLENCE
-      </span>
 
       {/* Header */}
       <div className="relative z-10 px-10 sm:px-14 lg:px-20 xl:px-28 pt-24 pb-0">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-20">
           <div>
-            <motion.span
-              initial={{ opacity: 0, y: 8 }}
+
+
+
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
-              className="text-xs font-bold tracking-[4px] uppercase font-mono mb-6 block"
-              style={{ color: "rgba(0,0,0,0.3)" }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="font-black leading-none tracking-tight text-brand-jet mb-6"
+              style={{ fontSize: "clamp(2.2rem, 5vw, 5rem)" }}
             >
-              {t("service_excellence", "SERVICE EXCELLENCE")}
-            </motion.span>
+              {title}
+            </motion.h2>
+
 
             <motion.div
               initial={{ scaleX: 0, opacity: 0 }}
@@ -88,16 +75,6 @@ export default function ExcellenceSection({ data }) {
               className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full mb-7"
             />
 
-            <motion.h2
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="font-black leading-[0.88] tracking-tight text-brand-jet"
-              style={{ fontSize: "clamp(2.2rem, 5vw, 5rem)" }}
-            >
-              {title}
-            </motion.h2>
           </div>
 
           {subtitle && (
@@ -106,8 +83,7 @@ export default function ExcellenceSection({ data }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base lg:text-lg leading-relaxed lg:max-w-xs"
-              style={{ color: "rgba(0,0,0,0.45)" }}
+              className="text-base lg:text-lg leading-relaxed lg:max-w-xs text-brand-charcoal"
             >
               {subtitle}
             </motion.p>
@@ -123,7 +99,6 @@ export default function ExcellenceSection({ data }) {
         {features.map((f, i) => (
           <FeatureCol
             key={i}
-            num={String(i + 1).padStart(2, "0")}
             title={f.title}
             description={f.description}
             index={i}

@@ -1,4 +1,4 @@
-"use client";
+  "use client";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import LocalizedLink from "./LocalizedLink";
@@ -25,7 +25,8 @@ export default function Footer() {
       links: [
         { label: t("about"),          href: "/about" },
         { label: t("services"),       href: "/services" },
-        { label: t("brand_portfolio"),href: "/brands" },
+        { label: t("brands"),href: "/brands" },
+        { label: t("blog"),           href: "/blog" },
         { label: t("contact_us"),     href: "/contact" },
       ],
     },
@@ -50,7 +51,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer style={{ background: "#0f0f0f" }} className="relative overflow-hidden">
+    <footer style={{ background: "#4B4F54" }} className="relative overflow-hidden">
 
       {/* ── Big wordmark background ── */}
       <span
@@ -61,7 +62,7 @@ export default function Footer() {
           lineHeight: 1,
           letterSpacing: "-0.04em",
         }}
-        className="absolute left-0 top-0 font-black uppercase select-none pointer-events-none leading-none"
+        className="absolute ltr:left-0 rtl:right-0 top-0 font-black uppercase select-none pointer-events-none leading-none"
       >
         TOP<br />BRANDS
       </span>
@@ -81,7 +82,7 @@ export default function Footer() {
             <LocalizedLink href="/">
               <img src="/images/logo.webp" alt="Top Brands Syria" className="h-9 w-auto mb-4 brightness-0 invert" />
             </LocalizedLink>
-            <p className="text-sm leading-relaxed max-w-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+            <p className="text-sm leading-relaxed max-w-xs" style={{ color: "rgba(255,255,255,1)" }}>
               {t("leading_fmcg")}
             </p>
           </motion.div>
@@ -95,13 +96,12 @@ export default function Footer() {
             className="lg:max-w-sm w-full"
           >
             <span
-              className="text-xs font-bold tracking-[4px] uppercase font-mono mb-4 block"
-              style={{ color: "rgba(255,255,255,0.35)" }}
+              className="text-xs text-brand-yellow font-bold tracking-[4px] uppercase font-mono mb-4 block"
             >
               {t("footer_stay_updated") || "STAY UPDATED"}
             </span>
             <div className="w-8 h-0.75 bg-brand-yellow rounded-full mb-5" />
-            <p className="text-sm mb-6 leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
+            <p className="text-sm mb-6 leading-relaxed" style={{ color: "rgba(255,255,255,1)" }}>
               {t("stay_updated_desc") || "Get the latest news from Top Brands Syria."}
             </p>
             <form
@@ -112,13 +112,13 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder={t("enter_email") || "Your email"}
-                className="flex-1 bg-transparent text-sm text-white outline-none placeholder-white/25"
+                className="flex-1 bg-transparent text-sm text-white outline-none placeholder-white/1"
               />
               <button
                 type="submit"
                 className="w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center shrink-0 transition-transform duration-300 hover:scale-110"
               >
-                <svg width="10" height="10" viewBox="0 0 11 11" fill="none">
+                <svg width="10" height="10" viewBox="0 0 11 11" fill="none" className="rtl:rotate-180">
                   <path d="M8.26615 4.79303L4.61493 1.00382L5.57863 -4.44968e-05L10.8587 5.49998L5.57863 11L4.61493 9.99614L8.26615 6.20692H0V4.79303H8.26615Z" fill="black" />
                 </svg>
               </button>
@@ -137,8 +137,7 @@ export default function Footer() {
               transition={{ duration: 0.45, delay: ci * 0.07 }}
             >
               <h4
-                className="text-xs font-bold tracking-[4px] uppercase font-mono mb-6"
-                style={{ color: "rgba(255,255,255,0.35)" }}
+                className="text-xs text-brand-yellow font-bold tracking-[4px] uppercase font-mono mb-6"
               >
                 {col.heading}
               </h4>
@@ -147,12 +146,11 @@ export default function Footer() {
                   <li key={li}>
                     <LocalizedLink
                       href={link.href}
-                      className="text-sm font-medium transition-colors duration-200"
-                      style={{ color: "rgba(255,255,255,0.55)" }}
+                      className="text-base font-medium transition-colors duration-200"
                       onMouseEnter={e => e.currentTarget.style.color = "#ffffff"}
                       onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.55)"}
                     >
-                      {link.label}
+                      {link.label}  
                     </LocalizedLink>
                   </li>
                 ))}
@@ -163,7 +161,7 @@ export default function Footer() {
 
         {/* ── Bottom bar: copyright + socials ── */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-5 pt-8">
-          <p className="text-xs font-mono" style={{ color: "rgba(255,255,255,0.25)" }}>
+          <p className="text-xs font-mono" >
             © {new Date().getFullYear()} Top Brands Syria. {t("all_rights_reserved")}.
           </p>
 
@@ -174,18 +172,8 @@ export default function Footer() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
-                style={{ color: "rgba(255,255,255,0.35)", border: "1px solid rgba(255,255,255,0.1)" }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = "#F7E326";
-                  e.currentTarget.style.borderColor = "#F7E326";
-                  e.currentTarget.style.color = "#000000";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-                  e.currentTarget.style.color = "rgba(255,255,255,0.35)";
-                }}
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:opacity-80"
+                style={{ background: "#F7E326", borderColor: "#F7E326", color: "#000000", border: "1px solid #F7E326" }}
               >
                 <i className={`${social.icon} text-sm`} />
               </a>

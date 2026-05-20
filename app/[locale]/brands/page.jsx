@@ -9,7 +9,7 @@ export default async function BrandsPage({ params }) {
 
   if (!data || !data.brands) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#0f0f0f" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#4b4f54" }}>
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">
             {locale === "ar" ? "خطأ في تحميل العلامات التجارية" : "Error loading brands"}
@@ -29,7 +29,7 @@ export default async function BrandsPage({ params }) {
   const ctaData  = findSection("categories");
 
   return (
-    <div className="min-h-screen" style={{ background: "#0f0f0f" }}>
+    <div className="min-h-screen" style={{ background: "#f7f6f2" }}>
       {heroData && <BrandsHero data={heroData} />}
       <BrandsGrid brands={brands} locale={locale} />
       {ctaData && <ServicesCTA data={ctaData} />}

@@ -8,14 +8,6 @@ export default function MarketCapabilities({ capabilitiesData, capabilities, isA
   return (
     <section className="relative overflow-hidden" style={{ background: "#f7f6f2" }}>
 
-      <span
-        aria-hidden="true"
-        className="absolute left-0 top-0 font-black leading-none tracking-tighter uppercase select-none pointer-events-none"
-        style={{ fontSize: "clamp(80px, 12vw, 180px)", color: "rgba(0,0,0,0.03)", lineHeight: 1 }}
-      >
-        NUMBERS
-      </span>
-
       {/* Header */}
       <div className="relative z-10 px-10 sm:px-14 lg:px-20 xl:px-28 pt-24 pb-0">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-20">
@@ -25,26 +17,18 @@ export default function MarketCapabilities({ capabilitiesData, capabilities, isA
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
-              className="text-xs font-bold tracking-[4px] uppercase font-mono mb-6 block"
-              style={{ color: "rgba(0,0,0,0.3)" }}
+              className="text-sm font-bold tracking-[4px] uppercase font-mono mb-6 block"
+              style={{ color: "rgba(0,0,0,1)" }}
             >
               {isAr ? "قدراتنا" : "OUR CAPABILITIES"}
             </motion.span>
-
-            <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: "easeOut" }}
-              className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full mb-7"
-            />
 
             <motion.h2
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="font-black leading-[0.88] tracking-tight text-brand-jet"
+              className="font-black leading-none tracking-tight text-brand-jet"
               style={{ fontSize: "clamp(2.2rem, 5vw, 5rem)" }}
             >
               {capabilitiesData?.["Element 1"]?.value}
@@ -58,7 +42,7 @@ export default function MarketCapabilities({ capabilitiesData, capabilities, isA
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-base lg:text-lg leading-relaxed lg:max-w-xs"
-              style={{ color: "rgba(0,0,0,0.45)" }}
+              style={{ color: "rgba(0,0,0,1)" }}
             >
               {capabilitiesData["Element 2"].value}
             </motion.p>
@@ -86,7 +70,7 @@ export default function MarketCapabilities({ capabilitiesData, capabilities, isA
               {/* Value */}
               <div
                 className="font-black text-brand-jet leading-none mb-4"
-                style={{ fontSize: "clamp(2.5rem, 5vw, 5rem)", letterSpacing: "-0.04em" }}
+                style={{ fontSize: "clamp(1.75rem, 3vw, 3rem)", letterSpacing: "-0.04em" }}
               >
                 {isNumber ? <Counter value={cap.val1} /> : cap.val1}
               </div>
@@ -95,11 +79,11 @@ export default function MarketCapabilities({ capabilitiesData, capabilities, isA
               <div className="w-8 h-0.75 bg-brand-yellow rounded-full mb-4" />
 
               {/* Label */}
-              <p className="text-xs font-bold tracking-[3px] uppercase font-mono" style={{ color: "rgba(0,0,0,0.4)" }}>
+              <p className="text-base font-bold tracking-[3px] uppercase font-mono" style={{ color: "rgba(0,0,0,1)" }}>
                 {cap.val0}
               </p>
               {cap.val2 && (
-                <p className="text-xs mt-1" style={{ color: "rgba(0,0,0,0.3)" }}>{cap.val2}</p>
+                <p className="text-sm mt-1 text-brand-charcoal">{cap.val2}</p>
               )}
             </motion.div>
           );

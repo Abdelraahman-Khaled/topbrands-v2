@@ -5,16 +5,9 @@ export default function MarketLogistics({ logisticsData, logisticsPoints, isAr }
   if (!logisticsData) return null;
 
   return (
-    <section className="relative overflow-hidden" style={{ background: "#0f0f0f" }}>
+    <section className="relative overflow-hidden" style={{ background: "#4b4f54" }}>
 
-      <span
-        aria-hidden="true"
-        className="absolute right-0 top-0 font-black leading-none tracking-tighter uppercase select-none pointer-events-none"
-        style={{ fontSize: "clamp(80px, 12vw, 180px)", color: "rgba(255,255,255,0.025)", lineHeight: 1 }}
-      >
-        LOGISTICS
-      </span>
-
+    
       <div className="relative z-10 flex flex-col lg:flex-row min-h-[60vh]">
 
         {/* Left — text */}
@@ -25,8 +18,7 @@ export default function MarketLogistics({ logisticsData, logisticsPoints, isAr }
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="text-xs font-bold tracking-[4px] uppercase font-mono mb-6 block"
-            style={{ color: "rgba(255,255,255,0.35)" }}
+            className="text-ms font-bold tracking-[4px] uppercase font-mono mb-6 block text-brand-yellow"
           >
             {isAr ? "البنية اللوجستية" : "LOGISTICS INFRASTRUCTURE"}
           </motion.span>
@@ -44,7 +36,7 @@ export default function MarketLogistics({ logisticsData, logisticsPoints, isAr }
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="font-black text-white leading-[0.88] tracking-tight mb-8"
+            className="font-black text-white leading-none tracking-tight mb-8"
             style={{ fontSize: "clamp(2rem, 4vw, 4rem)" }}
           >
             {logisticsData["Text Element 1"]?.value}
@@ -56,7 +48,6 @@ export default function MarketLogistics({ logisticsData, logisticsPoints, isAr }
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.18 }}
             className="text-base leading-relaxed mb-12"
-            style={{ color: "rgba(255,255,255,0.5)" }}
           >
             {logisticsData["Text Element 2"]?.value}
           </motion.p>
@@ -66,7 +57,7 @@ export default function MarketLogistics({ logisticsData, logisticsPoints, isAr }
             {logisticsPoints.map((pt, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -10 }}
+                initial={{ opacity: 0, x: isAr ? 10 : -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: 0.2 + i * 0.08 }}
@@ -79,8 +70,8 @@ export default function MarketLogistics({ logisticsData, logisticsPoints, isAr }
                   </svg>
                 </span>
                 <div>
-                  <h4 className="font-black text-white text-sm mb-1">{pt.title}</h4>
-                  <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>{pt.desc}</p>
+                  <h4 className="font-black text-white text-lg mb-1">{pt.title}</h4>
+                  <p className="text-base leading-relaxed" >{pt.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -101,7 +92,7 @@ export default function MarketLogistics({ logisticsData, logisticsPoints, isAr }
               alt="Logistics Infrastructure"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to left, transparent 50%, rgba(15,15,15,0.3) 100%)" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to left, transparent 50%, rgba(75,79,84,0.3) 100%)" }} />
           </motion.div>
         )}
       </div>

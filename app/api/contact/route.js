@@ -10,9 +10,26 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+async function verifyRecaptcha(token) {
+  const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      secret: process.env.RECAPTCHA_SECRET_KEY,
+      response: token,
+    }),
+  });
+  const data = await res.json();
+  return data.success === true;
+}
+
 export async function POST(request) {
   try {
-    const { name, email, phone, company, subject, message } = await request.json();
+    const { name, email, phone, company, subject, message, recaptchaToken } = await request.json();
+
+    if (!recaptchaToken || !(await verifyRecaptcha(recaptchaToken))) {
+      return Response.json({ ok: false, error: 'reCAPTCHA verification failed' }, { status: 400 });
+    }
 
     await transporter.sendMail({
       from: `"Top Brands Website" <${process.env.SMTP_USER}>`,

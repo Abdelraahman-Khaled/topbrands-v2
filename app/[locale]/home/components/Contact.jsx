@@ -1,11 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import ReCAPTCHA from "react-google-recaptcha";
+
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 export default function Contact({ data }) {
   const { t, i18n } = useTranslation();
-  const [formData, setFormData]     = useState({ name: "", email: "", phone: "", company: "", message: "" });
+  const recaptchaRef = useRef(null);
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", company: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState("idle");
 
@@ -13,16 +17,24 @@ export default function Contact({ data }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    if (!recaptchaToken) {
+      setSubmitStatus("recaptcha");
+      return;
+    }
     setIsSubmitting(true);
     setSubmitStatus("idle");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, subject: "Home Page Contact" }),
+        body: JSON.stringify({ ...formData, subject: "Home Page Contact", recaptchaToken }),
       });
       setSubmitStatus(res.ok ? "success" : "error");
-      if (res.ok) setFormData({ name: "", email: "", phone: "", company: "", message: "" });
+      if (res.ok) {
+        setFormData({ name: "", email: "", phone: "", company: "", message: "" });
+        recaptchaRef.current?.reset();
+      }
     } catch {
       setSubmitStatus("error");
     } finally {
@@ -32,40 +44,40 @@ export default function Contact({ data }) {
 
   if (!data) return null;
 
-  const isAr         = i18n.language === "ar";
+  const isAr = i18n.language === "ar";
   const settingsTitle = data.settings?.[isAr ? "1" : "0"]?.value || "";
 
-  const badgeText   = data["Contact Element 1"]?.value;
+  const badgeText = data["Contact Element 1"]?.value;
   const headerTitle = data["Contact Element 2"]?.value;
-  const headerDesc  = data["Contact Element 3"]?.value;
+  const headerDesc = data["Contact Element 3"]?.value;
 
   const contactInfo = [
     {
       icon: "ri-phone-line",
-      title:   data["Phone Label"]?.value    || t("phone"),
-      details: data["Phone Value"]?.value    || "+963 11 123 4567",
-      link:    `tel:${(data["Phone Value"]?.value || "").replace(/\s/g, "")}`,
+      title: data["Phone Label"]?.value || t("phone"),
+      details: "+963 11 6022",
+      link: "tel:+963116022",
     },
     {
       icon: "ri-mail-line",
-      title:   data["Email Label"]?.value    || t("email"),
-      details: data["Email Value"]?.value    || "info@topbrandssyria.com",
-      link:    `mailto:${data["Email Value"]?.value || ""}`,
+      title: data["Email Label"]?.value || t("email"),
+      details: "info@topbrands-sy.com",
+      link: "https://mail.google.com/mail/?view=cm&fs=1&to=info@topbrands-sy.com",
     },
     {
       icon: "ri-map-pin-line",
-      title:   data["Location Label"]?.value || t("location"),
+      title: data["Location Label"]?.value || t("location"),
       details: data["Location Value"]?.value || t("damascus_syria"),
-      link:    "#",
+      link: "https://maps.google.com/?q=33.6193071287417,36.489023297392414",
     },
   ];
 
-  const formTitle   = data["Form Title"]?.value        || t("send_us_message");
-  const formDesc    = data["Form Desc"]?.value         || t("fill_form_desc");
+  const formTitle = data["Form Title"]?.value || t("send_us_message");
+  const formDesc = data["Form Desc"]?.value || t("fill_form_desc");
   const submitLabel = data["Form Submit Label"]?.value || t("send_message");
 
   const inputClass =
-    "w-full bg-transparent border-b pb-3 text-sm font-medium outline-none placeholder-shown:placeholder-opacity-100";
+    "w-full bg-transparent text-brand-charcoal border-b pb-3 text-sm font-medium outline-none placeholder-shown:placeholder-opacity-100";
 
   return (
     <section
@@ -73,30 +85,22 @@ export default function Contact({ data }) {
       className="relative overflow-hidden"
       style={{ background: "#f7f6f2" }}
     >
-      {/* Faint watermark */}
-      <span
-        aria-hidden="true"
-        style={{ fontSize: "clamp(80px, 12vw, 160px)", color: "rgba(0,0,0,0.03)", lineHeight: 1 }}
-        className="absolute right-0 bottom-6 font-black leading-none tracking-tighter uppercase select-none pointer-events-none"
-      >
-        CONTACT
-      </span>
 
-      <div className="relative z-10 px-10 sm:px-14 lg:px-20 xl:px-28 pt-24 pb-28">
+
+      <div className="relative z-10 px-6 sm:px-12 lg:px-20 xl:px-28 pt-16 sm:pt-24 pb-20 sm:pb-28">
 
         {/* ── Header ── */}
-        <div className="mb-16 max-w-2xl">
-          <motion.span
-            initial={{ opacity: 0, y: 8 }}
+        <div className="mb-12 sm:mb-16 max-w-2xl">
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="text-xs font-bold tracking-[4px] uppercase font-mono mb-6 block"
-            style={{ color: "rgba(0,0,0,0.35)" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            style={{ fontSize: "clamp(2.2rem, 5vw, 5rem)", color: "#0f0f0f" }}
+            className="font-black leading-none tracking-tight mb-4"
           >
-            {badgeText || t("contact_us", "CONTACT US")}
-          </motion.span>
-
+            {headerTitle}
+          </motion.h2>
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
             whileInView={{ scaleX: 1, opacity: 1 }}
@@ -104,27 +108,13 @@ export default function Contact({ data }) {
             transition={{ duration: 0.55, ease: "easeOut" }}
             className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full mb-7"
           />
-
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            style={{ fontSize: "clamp(2.5rem, 5vw, 5rem)", color: "#0f0f0f" }}
-            className="font-black leading-[0.88] tracking-tight"
-          >
-            {headerTitle}
-            {settingsTitle && <span style={{ color: "#0f0f0f" }}> {settingsTitle}</span>}
-          </motion.h2>
-
           {headerDesc && (
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-6 text-base lg:text-lg leading-relaxed"
-              style={{ color: "rgba(0,0,0,0.5)" }}
+              className="mt-6 text-base text-brand-charcoal lg:text-lg leading-relaxed"
             >
               {headerDesc}
             </motion.p>
@@ -132,7 +122,7 @@ export default function Contact({ data }) {
         </div>
 
         {/* ── Two columns ── */}
-        <div className="flex flex-col lg:flex-row gap-16 xl:gap-28">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 xl:gap-28">
 
           {/* Left: contact info */}
           <div className="lg:w-2/5">
@@ -140,25 +130,28 @@ export default function Contact({ data }) {
               <motion.a
                 key={i}
                 href={info.link}
+                target="_blank"
+                rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ x: isAr ? -4 : 4 }}
+                whileTap={{ scale: 0.97 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.4, delay: i * 0.07 }}
-                className="flex items-center gap-5 border-t py-8 group block"
+                className="flex items-center gap-5 border-t py-8 group block cursor-pointer"
                 style={{ borderColor: "rgba(0,0,0,0.1)" }}
               >
-                <div className="w-10 h-10 bg-brand-yellow rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <div className="w-10 h-10 bg-brand-yellow rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 ">
                   <i className={`${info.icon} text-black text-lg`} />
                 </div>
                 <div>
                   <span
-                    className="text-xs font-mono tracking-[3px] uppercase mb-1 block"
-                    style={{ color: "rgba(0,0,0,0.35)" }}
+                    className="text-xs font-mono tracking-[3px] text-brand-charcoal uppercase mb-1 block"
                   >
                     {info.title}
                   </span>
-                  <p className="font-bold text-sm" style={{ color: "#0f0f0f" }}>
-                    {info.details}
+                  <p className="font-bold text-sm transition-colors duration-200 group-hover:text-brand-yellow" style={{ color: "#0f0f0f" }}>
+                    {i === 0 ? <span dir="ltr">{info.details}</span> : info.details}
                   </p>
                 </div>
               </motion.a>
@@ -176,20 +169,20 @@ export default function Contact({ data }) {
           >
             <p
               className="text-xs font-mono tracking-[3px] uppercase mb-2"
-              style={{ color: "rgba(0,0,0,0.35)" }}
+              style={{ color: "rgba(0,0,0,1)" }}
             >
               {formTitle}
             </p>
             {formDesc && (
-              <p className="text-sm mb-10 leading-relaxed" style={{ color: "rgba(0,0,0,0.45)" }}>
+              <p className="text-sm mb-10 leading-relaxed" style={{ color: "rgba(0,0,0,1)" }}>
                 {formDesc}
               </p>
             )}
 
-            <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-x-10 gap-y-8">
+            <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-x-10 gap-y-6 sm:gap-y-8">
 
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,0.35)" }}>
+                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
                   {t("name_required")}
                 </label>
                 <input
@@ -201,7 +194,7 @@ export default function Contact({ data }) {
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,0.35)" }}>
+                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
                   {t("email_required")}
                 </label>
                 <input
@@ -213,19 +206,20 @@ export default function Contact({ data }) {
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,0.35)" }}>
+                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
                   {t("phone_number")}
                 </label>
                 <input
                   type="tel" name="phone" value={formData.phone} onChange={handleChange}
-                  className={inputClass}
+                  dir="ltr"
+                  className={`${inputClass}${isAr ? " text-right" : ""}`}
                   style={{ borderColor: "rgba(0,0,0,0.15)", color: "#0f0f0f" }}
-                  placeholder={data["Form Phone Placeholder"]?.value || "+963 XX XXX XXXX"}
+                  placeholder={data["Form Phone Placeholder"]?.value || "+96 XX XXX XXXX"}
                 />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,0.35)" }}>
+                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
                   {t("company_name")}
                 </label>
                 <input
@@ -237,7 +231,7 @@ export default function Contact({ data }) {
               </div>
 
               <div className="md:col-span-2 flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,0.35)" }}>
+                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
                   {t("message_required")}
                 </label>
                 <textarea
@@ -264,21 +258,36 @@ export default function Contact({ data }) {
                   {t("error_msg")}
                 </div>
               )}
+              {submitStatus === "recaptcha" && (
+                <div
+                  className="md:col-span-2 px-5 py-4 text-sm font-medium rounded-lg"
+                  style={{ background: "rgba(200,0,0,0.06)", border: "1px solid rgba(200,0,0,0.25)", color: "rgb(180,0,0)" }}
+                >
+                  Please complete the reCAPTCHA verification.
+                </div>
+              )}
+
+              <div className="md:col-span-2">
+                <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />
+              </div>
 
               <div className="md:col-span-2 pt-2">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`inline-flex items-center gap-3 group transition-opacity ${isSubmitting ? "opacity-40 pointer-events-none" : ""}`}
+                  className={`circle-btn transition-opacity ${isSubmitting ? "opacity-40 pointer-events-none" : ""}`}
                 >
-                  <span className="text-sm font-bold tracking-widest uppercase" style={{ color: "#0f0f0f" }}>
-                    {isSubmitting ? t("btn_submitting") : submitLabel}
-                  </span>
-                  <span className="w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 rtl:rotate-180">
-                    <svg width="10" height="10" viewBox="0 0 11 11" fill="none">
-                      <path d="M8.26615 4.79303L4.61493 1.00382L5.57863 -4.44968e-05L10.8587 5.49998L5.57863 11L4.61493 9.99614L8.26615 6.20692H0V4.79303H8.26615Z" fill="black" />
-                    </svg>
-                  </span>
+                  <span className="circle-btn__wave" />
+                  <div className="circle-btn__content">
+                    <span className="circle-btn__label">
+                      {isSubmitting ? t("btn_submitting") : submitLabel}
+                    </span>
+                    <span className="circle-btn__icon">
+                      <svg width="14" height="14" viewBox="0 0 11 11" fill="none">
+                        <path d="M8.26615 4.79303L4.61493 1.00382L5.57863 -4.44968e-05L10.8587 5.49998L5.57863 11L4.61493 9.99614L8.26615 6.20692H0V4.79303H8.26615Z" fill="currentColor" />
+                      </svg>
+                    </span>
+                  </div>
                 </button>
               </div>
 

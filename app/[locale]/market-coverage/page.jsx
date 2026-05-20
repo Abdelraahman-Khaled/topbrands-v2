@@ -12,7 +12,7 @@ export default async function MarketCoveragePage({ params }) {
 
   if (!data || !Array.isArray(data)) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#0f0f0f" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#4b4f54" }}>
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Error loading market coverage</h1>
           <p style={{ color: "rgba(255,255,255,0.4)" }}>Please try again later.</p>
@@ -23,13 +23,13 @@ export default async function MarketCoveragePage({ params }) {
 
   const findSection = (key) => data.find((s) => s[key])?.[key];
 
-  const heroData         = findSection("hero");
-  const mapData          = findSection("map");
-  const areasData        = findSection("areas");
-  const channelsData     = findSection("channels");
+  const heroData = findSection("hero");
+  const mapData = findSection("map");
+  const areasData = findSection("areas");
+  const channelsData = findSection("channels");
   const capabilitiesData = findSection("capabilities");
-  const logisticsData    = findSection("logistics-infra");
-  const ctaData          = findSection("market-cta");
+  const logisticsData = findSection("logistics-infra");
+  const ctaData = findSection("market-cta");
 
   const chunkElements = (secData, start, size) => {
     if (!secData) return [];
@@ -46,8 +46,8 @@ export default async function MarketCoveragePage({ params }) {
     return results;
   };
 
-  const areas        = chunkElements(areasData, 1, 3);
-  const channels     = chunkElements(channelsData, 3, 3);
+  const areas = chunkElements(areasData, 1, 3);
+  const channels = chunkElements(channelsData, 3, 3);
   const capabilities = chunkElements(capabilitiesData, 3, 3);
 
   const logisticsPoints = [

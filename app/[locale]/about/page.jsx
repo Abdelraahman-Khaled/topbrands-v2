@@ -12,7 +12,7 @@ export default async function AboutPage({ params }) {
 
   if (!data || !Array.isArray(data)) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#0f0f0f" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#4B4F54" }}>
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Error loading content</h1>
           <p style={{ color: "rgba(255,255,255,0.4)" }}>Please try again later.</p>
@@ -31,7 +31,7 @@ export default async function AboutPage({ params }) {
   const ctaData        = findSection("about-cta");
 
   return (
-    <div className="min-h-screen" style={{ background: "#0f0f0f" }}>
+    <div className="min-h-screen" style={{ background: "#4B4F54" }}>
       {heroData       && <AboutHero      data={heroData} />}
       {whoWeAreData   && <WhoWeAre       data={whoWeAreData} />}
       {missionData    && <AboutMission   data={missionData} />}

@@ -14,11 +14,20 @@ export const CompanyProvider = ({ children }) => {
     async function fetchCompany() {
       try {
         const res = await getCompanyData(i18n.language);
-        if (res) {
-          setCompanyData(res.data || res);
-        }
+        const baseData = res ? (res.data || res) : {};
+        setCompanyData({
+          ...baseData,
+          phone_number_1: "+963 11 6022",
+          email: "info@topbrands-sy.com",
+          google_maps_url: "https://maps.google.com/?q=33.6193071287417,36.489023297392414",
+        });
       } catch (error) {
         console.error("Error in CompanyProvider:", error);
+        setCompanyData({
+          phone_number_1: "+963 11 6022",
+          email: "info@topbrands-sy.com",
+          google_maps_url: "https://maps.google.com/?q=33.6193071287417,36.489023297392414",
+        });
       } finally {
         setLoading(false);
       }

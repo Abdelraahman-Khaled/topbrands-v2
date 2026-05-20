@@ -21,23 +21,23 @@ export default async function ServicesPage({ params }) {
 
   const findSection = (key) => data.find((s) => s[key])?.[key];
 
-  const heroData        = findSection("hero");
-  const excellenceData  = findSection("service-exc");
-  const ctaData         = findSection("services-cta");
+  const heroData = findSection("hero");
+  const excellenceData = findSection("service-exc");
+  const ctaData = findSection("services-cta");
 
   const gridSections = {
-    fmcgDist:           findSection("fmcg-dist"),
-    retailTrade:        findSection("retail-trade"),
-    brandRep:           findSection("brand-rep"),
-    salesExec:          findSection("sales-exec"),
-    marketCov:          findSection("market-cov"),
-    merchVis:           findSection("merch-vis"),
-    importTrade:        findSection("import-trade"),
+    fmcgDist: findSection("fmcg-dist"),
+    retailTrade: findSection("retail-trade"),
+    brandRep: findSection("brand-rep"),
+    salesExec: findSection("sales-exec"),
+    marketCov: findSection("market-cov"),
+    merchVis: findSection("merch-vis"),
+    importTrade: findSection("import-trade"),
     marketIntelligence: findSection("market_intelligence"),
   };
 
   return (
-    <div className="min-h-screen" style={{ background: "#0f0f0f" }}>
+    <div className="min-h-screen" style={{ background: "#4b4f54" }}>
       {heroData && <ServicesHero data={heroData} />}
       <ServicesGrid data={gridSections} />
       {excellenceData && <ExcellenceSection data={excellenceData} />}

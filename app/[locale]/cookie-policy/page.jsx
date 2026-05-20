@@ -179,11 +179,11 @@ export default function CookiePolicy() {
                   <div className="space-y-3">
                     <p className="flex items-center gap-3 text-gray-700 font-semibold text-sm md:text-base flex-wrap">
                       <i className="ri-mail-line text-black text-xl shrink-0"></i>
-                      privacy@b2bdistribution.sy
+                      info@topbrands-sy.com
                     </p>
                     <p className="flex items-center gap-3 text-gray-700 font-semibold text-sm md:text-base flex-wrap">
                       <i className="ri-phone-line text-black text-xl shrink-0"></i>
-                      +963 11 123 4567
+                      <span dir="ltr">+963 11 6022</span>
                     </p>
                     <p className="flex items-center gap-3 text-gray-700 font-semibold text-sm md:text-base flex-wrap">
                       <i className="ri-map-pin-line text-black text-xl shrink-0"></i>
