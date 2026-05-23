@@ -23,21 +23,21 @@ export default async function AboutPage({ params }) {
 
   const findSection = (key) => data.find((s) => s[key])?.[key];
 
-  const heroData       = findSection("hero");
-  const whoWeAreData   = findSection("who-we-are");
-  const missionData    = findSection("vision-mission");
+  const heroData = findSection("hero");
+  const whoWeAreData = findSection("who-we-are");
+  const missionData = findSection("vision-mission");
   const coreValuesData = findSection("core-values");
-  const edgeData       = findSection("comp-edge");
-  const ctaData        = findSection("about-cta");
+  const edgeData = findSection("comp-edge");
+  const ctaData = findSection("about-cta");
 
   return (
     <div className="min-h-screen" style={{ background: "#4B4F54" }}>
-      {heroData       && <AboutHero      data={heroData} />}
-      {whoWeAreData   && <WhoWeAre       data={whoWeAreData} />}
-      {missionData    && <AboutMission   data={missionData} />}
-      {coreValuesData && <CoreValues     data={coreValuesData} />}
-      {edgeData       && <OurEdgeSection data={edgeData} />}
-      {ctaData        && <ServicesCTA    data={ctaData} />}
+      {heroData && <AboutHero data={heroData} />}
+      {whoWeAreData && <WhoWeAre data={whoWeAreData} />}
+      {missionData && <AboutMission data={missionData} />}
+      {coreValuesData && <CoreValues data={coreValuesData} />}
+      {edgeData && <OurEdgeSection data={edgeData} />}
+      {ctaData && <ServicesCTA data={ctaData} />}
     </div>
   );
 }

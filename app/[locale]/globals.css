@@ -93,6 +93,7 @@ textarea::placeholder {
   background-position: right center;
   transition: background-position 0.4s ease;
 }
+
 .hover-fill-ltr:hover {
   background-position: left center;
 }
@@ -119,6 +120,7 @@ textarea::placeholder {
     all 0.3s ease,
     background-color 0s linear 0.7s;
 }
+
 .mask-btn:hover {
   transition:
     all 0.3s ease,
@@ -136,12 +138,14 @@ textarea::placeholder {
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.4) !important;
 }
+
 .mask-btn--none-white .mask-btn__fill {
   -webkit-mask-position: 100% 0;
   mask-position: 100% 0;
   -webkit-animation: ani-to-100 0.7s steps(29) forwards;
   animation: ani-to-100 0.7s steps(29) forwards;
 }
+
 .mask-btn--none-white:hover .mask-btn__fill {
   -webkit-animation: ani-to-0 0.7s steps(29) forwards;
   animation: ani-to-0 0.7s steps(29) forwards;
@@ -149,14 +153,20 @@ textarea::placeholder {
 
 /* [REVEAL] Yellow → White: Starts yellow, fills white on hover */
 .mask-btn--yellow-white {
-  --_fill: #f7e326; /* The starting color */
-  --_fill-text: #000; /* Text color on yellow */
-  --_label: #000; /* Text color on white (the background) */
+  --_fill: #f7e326;
+  /* The starting color */
+  --_fill-text: #000;
+  /* Text color on yellow */
+  --_label: #000;
+  /* Text color on white (the background) */
   --_label-hover: #000;
-  background-color: transparent; /* Prevents corner bleed */
+  background-color: transparent;
+  /* Prevents corner bleed */
 }
+
 .mask-btn--yellow-white:hover {
-  background-color: #fff; /* Target color shown on hover */
+  background-color: #fff;
+  /* Target color shown on hover */
 }
 
 .mask-btn--yellow-white .mask-btn__fill {
@@ -170,6 +180,7 @@ textarea::placeholder {
   -webkit-animation: ani-to-100 0.7s steps(29) forwards;
   animation: ani-to-100 0.7s steps(29) forwards;
 }
+
 /* [ERASE] Yellow → Black: Starts yellow, sweeps out to reveal black */
 .mask-btn--yellow-black {
   --_fill: #f7e326;
@@ -178,15 +189,18 @@ textarea::placeholder {
   --_label-hover: #fff;
   background-color: transparent;
 }
+
 .mask-btn--yellow-black:hover {
   background-color: #000;
 }
+
 .mask-btn--yellow-black .mask-btn__fill {
   -webkit-mask-position: 0 0;
   mask-position: 0 0;
   -webkit-animation: ani-to-0 0.7s steps(29) forwards;
   animation: ani-to-0 0.7s steps(29) forwards;
 }
+
 .mask-btn--yellow-black:hover .mask-btn__fill {
   -webkit-animation: ani-to-100 0.7s steps(29) forwards;
   animation: ani-to-100 0.7s steps(29) forwards;
@@ -200,12 +214,14 @@ textarea::placeholder {
   --_label-hover: #fff;
   background: #4b4f54;
 }
+
 .mask-btn--gray-black .mask-btn__fill {
   -webkit-mask-position: 100% 0;
   mask-position: 100% 0;
   -webkit-animation: ani-to-100 0.7s steps(29) forwards;
   animation: ani-to-100 0.7s steps(29) forwards;
 }
+
 .mask-btn--gray-black:hover .mask-btn__fill {
   -webkit-animation: ani-to-0 0.7s steps(29) forwards;
   animation: ani-to-0 0.7s steps(29) forwards;
@@ -220,12 +236,14 @@ textarea::placeholder {
   background: transparent;
   border: 2px solid #000 !important;
 }
+
 .mask-btn--none-black .mask-btn__fill {
   -webkit-mask-position: 100% 0;
   mask-position: 100% 0;
   -webkit-animation: ani-to-100 0.7s steps(29) forwards;
   animation: ani-to-100 0.7s steps(29) forwards;
 }
+
 .mask-btn--none-black:hover .mask-btn__fill {
   -webkit-animation: ani-to-0 0.7s steps(29) forwards;
   animation: ani-to-0 0.7s steps(29) forwards;
@@ -248,6 +266,7 @@ textarea::placeholder {
   z-index: 1;
   transition: color 0.15s ease-in-out;
 }
+
 .mask-btn:hover .mask-btn__label {
   color: var(--_label-hover);
 }
@@ -298,6 +317,7 @@ textarea::placeholder {
   cursor: pointer;
   text-decoration: none;
 }
+
 .circle-btn:hover {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
@@ -316,11 +336,13 @@ textarea::placeholder {
   transition: transform 0.7s ease-in-out;
   z-index: 0;
 }
+
 html[dir="rtl"] .circle-btn__wave,
 [dir="rtl"] .circle-btn__wave {
   right: auto;
   left: 0;
 }
+
 .circle-btn:hover .circle-btn__wave {
   transform: translateY(-50%) scale(45);
 }
@@ -350,6 +372,7 @@ html[dir="rtl"] .circle-btn__wave,
   line-height: 1.25;
   max-width: 110px;
 }
+
 .circle-btn:hover .circle-btn__label {
   color: #000000;
 }
@@ -363,10 +386,12 @@ html[dir="rtl"] .circle-btn__wave,
   color: var(--color-brand-yellow, #f7e326);
   transition: all 0.7s ease-in-out;
 }
+
 .circle-btn:hover .circle-btn__icon {
   color: #000000;
   transform: translateX(4px);
 }
+
 /* ── RTL: flip all scale-from-left to scale-from-right ── */
 [dir="rtl"] .origin-left {
   transform-origin: right center;
@@ -376,6 +401,7 @@ html[dir="rtl"] .circle-btn:hover .circle-btn__icon,
 [dir="rtl"] .circle-btn:hover .circle-btn__icon {
   transform: translateX(-4px) rotate(180deg);
 }
+
 html[dir="rtl"] .circle-btn__icon,
 [dir="rtl"] .circle-btn__icon {
   transform: rotate(180deg);
@@ -389,16 +415,19 @@ html[dir="rtl"] .circle-btn__icon,
     -webkit-mask-position: 0 0;
     mask-position: 0 0;
   }
+
   to {
     -webkit-mask-position: 100% 0;
     mask-position: 100% 0;
   }
 }
+
 @-webkit-keyframes ani-to-100 {
   from {
     -webkit-mask-position: 0 0;
     mask-position: 0 0;
   }
+
   to {
     -webkit-mask-position: 100% 0;
     mask-position: 100% 0;
@@ -411,16 +440,19 @@ html[dir="rtl"] .circle-btn__icon,
     -webkit-mask-position: 100% 0;
     mask-position: 100% 0;
   }
+
   to {
     -webkit-mask-position: 0 0;
     mask-position: 0 0;
   }
 }
+
 @-webkit-keyframes ani-to-0 {
   from {
     -webkit-mask-position: 100% 0;
     mask-position: 100% 0;
   }
+
   to {
     -webkit-mask-position: 0 0;
     mask-position: 0 0;
@@ -480,14 +512,17 @@ html[dir="rtl"] .circle-btn__icon,
   from {
     width: 0;
   }
+
   to {
     width: 100%;
   }
 }
+
 @keyframes trace-v {
   from {
     height: 0;
   }
+
   to {
     height: 100%;
   }
@@ -516,6 +551,7 @@ html[dir="rtl"] .circle-btn__icon,
   img {
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
   .group:hover img:not(.no-zoom) {
     transform: scale(1.03);
   }
@@ -553,6 +589,7 @@ html[dir="rtl"] .circle-btn__icon,
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -589,6 +626,7 @@ section.bg-black .grid {
   from {
     box-shadow: 0 0 4px 0 rgba(247, 227, 38, 0.4);
   }
+
   to {
     box-shadow: 0 0 10px 3px rgba(247, 227, 38, 0.7);
   }
@@ -613,14 +651,14 @@ section.bg-black .grid {
    Service card — subtle left border pulse on hover
    ─────────────────────────────────────────────────────────────────── */
 
-#services .grid > div > div {
+#services .grid>div>div {
   transition:
     border-color 0.35s ease,
     box-shadow 0.35s ease,
     transform 0.35s ease;
 }
 
-#services .grid > div > div:hover {
+#services .grid>div>div:hover {
   transform: translateY(-4px);
   box-shadow: 0 16px 40px -12px rgba(247, 227, 38, 0.15);
 }
@@ -629,11 +667,11 @@ section.bg-black .grid {
    WhyChooseUs — card glow trace
    ─────────────────────────────────────────────────────────────────── */
 
-#why-choose-us .grid > div {
+#why-choose-us .grid>div {
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-#why-choose-us .grid > div:hover {
+#why-choose-us .grid>div:hover {
   transform: translateY(-5px);
 }
 
@@ -641,7 +679,7 @@ section.bg-black .grid {
    WhyPartner — card glass shimmer
    ─────────────────────────────────────────────────────────────────── */
 
-section.bg-black .grid > div {
+section.bg-black .grid>div {
   position: relative;
   overflow: hidden;
   transition:
@@ -650,24 +688,22 @@ section.bg-black .grid > div {
     background-color 0.3s ease;
 }
 
-section.bg-black .grid > div::before {
+section.bg-black .grid>div::before {
   content: "";
   position: absolute;
   top: -60%;
   left: -60%;
   width: 50%;
   height: 200%;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.06) 50%,
-    transparent 60%
-  );
+  background: linear-gradient(105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.06) 50%,
+      transparent 60%);
   transform: skewX(-20deg) translateX(-100%);
   transition: none;
 }
 
-section.bg-black .grid > div:hover::before {
+section.bg-black .grid>div:hover::before {
   animation: glass-shimmer 0.65s ease forwards;
 }
 
@@ -675,12 +711,13 @@ section.bg-black .grid > div:hover::before {
   0% {
     transform: skewX(-20deg) translateX(-100%);
   }
+
   100% {
     transform: skewX(-20deg) translateX(400%);
   }
 }
 
-section.bg-black .grid > div:hover {
+section.bg-black .grid>div:hover {
   transform: translateY(-6px);
   border-color: rgba(247, 227, 38, 0.2);
   background-color: rgba(255, 255, 255, 0.06);
@@ -690,8 +727,8 @@ section.bg-black .grid > div:hover {
    Contact cards — yellow ring on hover
    ─────────────────────────────────────────────────────────────────── */
 
-#contact .grid > div,
-#contact .grid > a {
+#contact .grid>div,
+#contact .grid>a {
   transition:
     transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.35s ease;
@@ -785,8 +822,14 @@ section[id="why-choose-us"] {
 
 /* ── Arabic leading-none override ── */
 @layer utilities {
+
   :lang(ar) .leading-none,
   .leading-none:lang(ar) {
     line-height: 1.4 !important;
   }
+}
+
+
+.leading-none {
+  line-height: 1.2 !important;
 }
