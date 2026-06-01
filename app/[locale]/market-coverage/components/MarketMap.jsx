@@ -108,7 +108,7 @@ function LeafletMap({ isAr }) {
   }, []);
 
   return (
-    <div className="group relative w-full h-140 lg:h-170 rounded-xl overflow-hidden border border-gray-100">
+    <div className="group relative w-full h-100 sm:h-110 lg:h-125 max-h-[70vh] rounded-xl overflow-hidden border border-gray-100">
       <div ref={mapRef} className="w-full h-full" />
 
       {/* Placeholder overlay — Syria map with governorate dots, removed on hover */}
@@ -119,7 +119,7 @@ function LeafletMap({ isAr }) {
             "radial-gradient(130% 130% at 30% 20%, #565a60 0%, #45484d 55%, #303338 100%)",
         }}
       >
-        <SyriaMap className="w-[68%] max-w-[520px] h-auto drop-shadow-[0_0_40px_rgba(247,227,38,0.2)]" />
+        <SyriaMap className="h-[85%] w-auto max-w-[90%] drop-shadow-[0_0_40px_rgba(247,227,38,0.2)]" />
         <span className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs font-bold tracking-[3px] uppercase text-white/70 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-brand-yellow animate-pulse" />
           {isAr ? "مرّر للاستكشاف على الخريطة التفاعلية" : "Hover to explore the interactive map"}
