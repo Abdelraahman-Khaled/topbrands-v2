@@ -10,12 +10,14 @@ const FAQAccordion = ({ faqs, locale }) => {
         setOpenId(openId === id ? null : id);
     };
 
-    if (!faqs || faqs.length === 0) return null;
+    const faqList = Array.isArray(faqs) ? faqs : (faqs && Array.isArray(faqs.data) ? faqs.data : []);
+
+    if (!faqList || faqList.length === 0) return null;
 
     return (
         <div className="space-y-4">
             <AnimatePresence mode="popLayout">
-                {faqs.map((faq) => {
+                {faqList.map((faq) => {
                     // Handle both flattened and multi-language formats
                     const question = faq.question || (isAr ? faq.question_ar : faq.question_en);
                     const answer = faq.answer || (isAr ? faq.answer_ar : faq.answer_en);

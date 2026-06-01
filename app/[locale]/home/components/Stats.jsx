@@ -42,7 +42,7 @@ export default function Stats({ data }) {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
               style={{ fontSize: "clamp(2.5rem, 5vw, 5rem)", color: "#ffffff" }}
-              className="font-black leading-none tracking-tight mb-5"
+              className="font-black leading-none tracking-tight mb-6"
             >
               {title}
             </motion.h2>

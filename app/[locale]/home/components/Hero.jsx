@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { headlineRevealVariants, tapButtonVariants } from "../../lib/animations";
 import LocalizedLink from "../../components/LocalizedLink";
+import SyriaMap from "./SyriaMap";
 
 export default function Hero({ data }) {
   const { t, i18n } = useTranslation();
@@ -17,40 +18,67 @@ export default function Hero({ data }) {
   const subtitle = data["Subtitle"]?.value;
   const button1Text = data["Button 1 Text"]?.value;
   const button2Text = data["Button 2 Text"]?.value;
-  const imageUrl = data.image_url;
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-jet">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <div className={`absolute top-0 ${isRtl ? 'right-0' : 'left-0'} w-full lg:w-[60%] h-full`}>
-          {imageUrl && (
-            <img
-              src={imageUrl}
-              alt={title1 || "Hero Image"}
-              className="w-full h-full object-cover object-center"
-            />
-          )}
-          <div className="absolute inset-0 bg-linear-to-t from-transparent via-black/30 to-black/40"></div>
-        </div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-charcoal">
+      {/* Base gray background with subtle depth */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(130% 130% at 25% 15%, #565a60 0%, #45484d 55%, #303338 100%)",
+        }}
+      ></div>
+
+      {/* Diagonal light streaks */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none hidden md:block">
+        {[
+          { pos: "18%", w: "260px", o: 0.05 },
+          { pos: "34%", w: "150px", o: 0.06 },
+          { pos: "48%", w: "320px", o: 0.04 },
+          { pos: "64%", w: "120px", o: 0.05 },
+        ].map((s, i) => (
+          <div
+            key={i}
+            className={`absolute -top-[20%] ${isRtl ? 'left-0' : 'right-0'} h-[140%]`}
+            style={{
+              width: s.w,
+              [isRtl ? 'left' : 'right']: s.pos,
+              background: `linear-gradient(to right, transparent, rgba(255,255,255,${s.o}), transparent)`,
+              transform: `rotate(${isRtl ? '-15deg' : '15deg'})`,
+            }}
+          ></div>
+        ))}
+        {/* yellow accent line */}
+        <div
+          className={`absolute -top-[20%] ${isRtl ? 'left-[28%]' : 'right-[28%]'} w-1 h-[140%]`}
+          style={{
+            background:
+              "linear-gradient(180deg, #F7E32600 0%, #F7E32666 55%, #F7E32600 100%)",
+            transform: `rotate(${isRtl ? '-15deg' : '15deg'})`,
+          }}
+        ></div>
       </div>
 
-      {/* Decorative Gradient overlays */}
-      <div
-        className={`absolute top-0 ${isRtl ? 'left-0' : 'right-0'} w-[40%] h-full z-0 hidden lg:block`}
-        style={{
-          background: isRtl
-            ? "linear-gradient(240deg, #4B4F54 0%, #000000 70%, #F7E326 100%)"
-            : "linear-gradient(120deg, #4B4F54 0%, #000000 70%, #F7E326 100%)",
-        }}
-      ></div>
-      <div
-        className={`absolute top-0 ${isRtl ? 'left-[25%]' : 'right-[25%]'} z-0 w-1 h-full hidden lg:block`}
-        style={{
-          background: "linear-gradient(135deg, #F7E32600 0%, #F7E32699 60%, #F7E32600 100%)",
-          transform: `translateX(${isRtl ? '50%' : '-50%'}) rotate(${isRtl ? '-15deg' : '15deg'})`,
-        }}
-      ></div>
+      {/* Animated Syria map with governorate dots */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        className={`absolute top-[14%] ${isRtl ? 'left-[2%]' : 'right-[2%]'} w-[42%] max-w-[600px] z-0 hidden lg:block`}
+      >
+        <SyriaMap className="w-full h-auto drop-shadow-[0_0_40px_rgba(247,227,38,0.18)]" />
+      </motion.div>
+
+      {/* Big "tb" brand logo */}
+      <motion.img
+        src="/images/tb-mark.png"
+        alt="Top Brands"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className={`absolute bottom-[8%] ${isRtl ? 'left-[6%]' : 'right-[6%]'} w-[34%] max-w-[440px] z-0 hidden lg:block drop-shadow-[0_0_60px_rgba(247,227,38,0.35)]`}
+      />
 
       {/* Content */}
       <div className="relative flex z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-24 sm:py-32 text-start w-full md:mt-0 mt-4 mb-12">

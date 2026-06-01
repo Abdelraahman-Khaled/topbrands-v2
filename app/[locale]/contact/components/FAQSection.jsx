@@ -6,7 +6,9 @@ const FAQSection = ({ faqs, locale }) => {
     const isAr = locale === 'ar';
     const [activeIndex, setActiveIndex] = useState(null);
 
-    if (!faqs || faqs.length === 0) return null;
+    const faqList = Array.isArray(faqs) ? faqs : (faqs && Array.isArray(faqs.data) ? faqs.data : []);
+
+    if (!faqList || faqList.length === 0) return null;
 
     return (
         <section className="py-20 bg-brand-paleblue/30 mt-20 rounded-[40px] border border-[#DEE3EB]/50">
@@ -18,7 +20,7 @@ const FAQSection = ({ faqs, locale }) => {
                     </h2>
                 </div>
                 <div className="space-y-4">
-                    {faqs.map((faq, index) => {
+                    {faqList.map((faq, index) => {
                         const question = faq.question || (isAr ? faq.question_ar : faq.question_en);
                         const answer = faq.answer || (isAr ? faq.answer_ar : faq.answer_en);
                         

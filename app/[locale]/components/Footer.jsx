@@ -1,4 +1,4 @@
-  "use client";
+"use client";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import LocalizedLink from "./LocalizedLink";
@@ -9,43 +9,43 @@ export default function Footer() {
   const { companyData } = useCompany();
 
   const socialLinks = [
-    { icon: "ri-linkedin-fill",  href: companyData?.linkedin_url  || "#" },
-    { icon: "ri-facebook-fill",  href: companyData?.facebook_url  || "#" },
-    { icon: "ri-instagram-line", href: companyData?.instagram_url || "#" },
-    { icon: "ri-twitter-x-fill", href: companyData?.twitter_url   || "#" },
+    { icon: "ri-linkedin-fill", href: companyData?.linkedin_url },
+    { icon: "ri-facebook-fill", href: companyData?.facebook_url },
+    { icon: "ri-instagram-line", href: companyData?.instagram_url },
+    { icon: "ri-twitter-x-fill", href: companyData?.twitter_url },
     {
       icon: "ri-whatsapp-line",
-      href: `https://wa.me/${(companyData?.whatsapp_number || "").replace(/\s/g, "")}`,
+      href: companyData?.whatsapp_number ? `https://wa.me/${companyData.whatsapp_number.replace(/\s/g, "")}` : "",
     },
-  ];
+  ].filter(link => link.href && link.href.trim() !== "");
 
   const navCols = [
     {
       heading: t("company"),
       links: [
-        { label: t("about"),          href: "/about" },
-        { label: t("services"),       href: "/services" },
-        { label: t("brands"),href: "/brands" },
-        { label: t("blog"),           href: "/blog" },
-        { label: t("contact_us"),     href: "/contact" },
+        { label: t("about"), href: "/about" },
+        { label: t("services"), href: "/services" },
+        { label: t("brands"), href: "/brands" },
+        { label: t("blog"), href: "/blog" },
+        { label: t("contact_us"), href: "/contact" },
       ],
     },
     {
       heading: t("services"),
       links: [
-        { label: t("Advanced_Logistics"),   href: "/services/logistics" },
-        { label: t("professional_sales"),   href: "/services/professional-sales" },
-        { label: t("distribution"),         href: "/services/distribution" },
-        { label: t("marketing_service"),    href: "/services/marketing" },
+        { label: t("Advanced_Logistics"), href: "/services/logistics" },
+        { label: t("professional_sales"), href: "/services/professional-sales" },
+        { label: t("distribution"), href: "/services/distribution" },
+        { label: t("marketing_service"), href: "/services/marketing" },
       ],
     },
     {
       heading: t("legal"),
       links: [
-        { label: t("privacy_policy"),   href: "/privacy-policy" },
+        { label: t("privacy_policy"), href: "/privacy-policy" },
         { label: t("terms_conditions"), href: "/terms-conditions" },
-        { label: t("cookie_policy"),    href: "/cookie-policy" },
-        { label: t("faq"),              href: "/faq" },
+        { label: t("cookie_policy"), href: "/cookie-policy" },
+        { label: t("faq"), href: "/faq" },
       ],
     },
   ];
@@ -137,7 +137,7 @@ export default function Footer() {
               transition={{ duration: 0.45, delay: ci * 0.07 }}
             >
               <h4
-                className="text-xs text-brand-yellow font-bold tracking-[4px] uppercase font-mono mb-6"
+                className="text-lg text-brand-yellow font-bold tracking-[2px]  mb-6"
               >
                 {col.heading}
               </h4>
@@ -146,11 +146,9 @@ export default function Footer() {
                   <li key={li}>
                     <LocalizedLink
                       href={link.href}
-                      className="text-base font-medium transition-colors duration-200"
-                      onMouseEnter={e => e.currentTarget.style.color = "#ffffff"}
-                      onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.55)"}
+                      className="text-base font-medium text-white hover:text-white/80 transition-colors duration-200"
                     >
-                      {link.label}  
+                      {link.label}
                     </LocalizedLink>
                   </li>
                 ))}

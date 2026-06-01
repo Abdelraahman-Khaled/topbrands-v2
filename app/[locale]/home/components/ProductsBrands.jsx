@@ -17,7 +17,7 @@ export default function ProductsBrands({ data, brands = [] }) {
       className="relative min-h-screen flex flex-col justify-center overflow-hidden px-6 sm:px-12 lg:px-20 xl:px-28 py-16 sm:py-24"
       style={{ background: "#f7f6f2" }}
     >
-    
+
 
       {/* Header */}
       <div className="mb-14">
@@ -28,19 +28,22 @@ export default function ProductsBrands({ data, brands = [] }) {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
           style={{ fontSize: "clamp(2.2rem, 5vw, 5rem)", color: "#0f0f0f" }}
-          className="font-black leading-none tracking-tight"
+          className="font-black leading-none tracking-tight mb-6"
         >
           {title}
         </motion.h2>
+
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, ease: "easeOut" }}
+          className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full "
+        />
+
       </div>
 
-      <motion.div
-        initial={{ scaleX: 0, opacity: 0 }}
-        whileInView={{ scaleX: 1, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.55, ease: "easeOut" }}
-        className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full mb-7"
-      />
+
 
       {/* Brand logos grid (Exactly 4 per row on desktop/tablet) */}
       <motion.div

@@ -52,10 +52,10 @@ export default function Services({ data, cta }) {
       <div className="w-full px-6 sm:px-12 lg:px-20 xl:px-28 pt-20 pb-12 bg-black text-white">
         <div className="max-w-5xl">
 
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight mb-6">
             {badgeText}
           </h2>
-          <div className="w-12 h-1 bg-brand-yellow rounded-full mb-6" />
+          <div className="w-12 h-1 bg-brand-yellow rounded-full " />
         </div>
       </div>
 

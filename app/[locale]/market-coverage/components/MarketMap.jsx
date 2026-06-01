@@ -1,6 +1,7 @@
 "use client"
 import React, { useRef } from 'react';
 import { motion } from "framer-motion";
+import SyriaMap from "../../home/components/SyriaMap";
 
 // Syria geographic bounds
 const SYRIA_BOUNDS = [[32.0, 35.5], [37.5, 42.5]];
@@ -107,8 +108,23 @@ function LeafletMap({ isAr }) {
   }, []);
 
   return (
-    <div className="relative w-full h-140 lg:h-170 rounded-xl overflow-hidden border border-gray-100">
+    <div className="group relative w-full h-140 lg:h-170 rounded-xl overflow-hidden border border-gray-100">
       <div ref={mapRef} className="w-full h-full" />
+
+      {/* Placeholder overlay — Syria map with governorate dots, removed on hover */}
+      <div
+        className="absolute inset-0 z-1002 flex items-center justify-center overflow-hidden transition-opacity duration-500 ease-out group-hover:opacity-0 group-hover:pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(130% 130% at 30% 20%, #565a60 0%, #45484d 55%, #303338 100%)",
+        }}
+      >
+        <SyriaMap className="w-[68%] max-w-[520px] h-auto drop-shadow-[0_0_40px_rgba(247,227,38,0.2)]" />
+        <span className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs font-bold tracking-[3px] uppercase text-white/70 flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-brand-yellow animate-pulse" />
+          {isAr ? "مرّر للاستكشاف على الخريطة التفاعلية" : "Hover to explore the interactive map"}
+        </span>
+      </div>
 
       {/* Badge */}
       <div className="absolute top-4 right-4 z-1001 pointer-events-none">

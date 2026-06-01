@@ -76,226 +76,166 @@ export default function Contact({ data }) {
   const formDesc = data["Form Desc"]?.value || t("fill_form_desc");
   const submitLabel = data["Form Submit Label"]?.value || t("send_message");
 
-  const inputClass =
-    "w-full bg-transparent text-brand-charcoal border-b pb-3 text-sm font-medium outline-none placeholder-shown:placeholder-opacity-100";
-
   return (
-    <section
-      id="contact"
-      className="relative overflow-hidden"
-      style={{ background: "#f7f6f2" }}
-    >
-
-
-      <div className="relative z-10 px-6 sm:px-12 lg:px-20 xl:px-28 pt-16 sm:pt-24 pb-20 sm:pb-28">
-
-        {/* ── Header ── */}
-        <div className="mb-12 sm:mb-16 max-w-2xl">
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            style={{ fontSize: "clamp(2.2rem, 5vw, 5rem)", color: "#0f0f0f" }}
-            className="font-black leading-none tracking-tight mb-4"
-          >
-            {headerTitle}
-          </motion.h2>
-          <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
-            whileInView={{ scaleX: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, ease: "easeOut" }}
-            className="w-10 h-0.75 bg-brand-yellow origin-left rounded-full mb-7"
-          />
-          {headerDesc && (
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-6 text-base text-brand-charcoal lg:text-lg leading-relaxed"
-            >
-              {headerDesc}
-            </motion.p>
-          )}
-        </div>
-
-        {/* ── Two columns ── */}
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 xl:gap-28">
-
-          {/* Left: contact info */}
-          <div className="lg:w-2/5">
-            {contactInfo.map((info, i) => (
-              <motion.a
+    <div id="contact" className="relative overflow-hidden">
+      {/* ── CONTACT INFO STRIPS ── */}
+      <section style={{ background: "#0f0f0f" }}>
+        <div className="border-t border-l" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+          <div className="grid grid-cols-1 md:grid-cols-3">
+            {contactInfo.map((card, i) => (
+              <a
                 key={i}
-                href={info.link}
-                target="_blank"
+                href={card.link}
+                target={card.link.startsWith("http") ? "_blank" : undefined}
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ x: isAr ? -4 : 4 }}
-                whileTap={{ scale: 0.97 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.4, delay: i * 0.07 }}
-                className="flex items-center gap-5 border-t py-8 group block cursor-pointer"
-                style={{ borderColor: "rgba(0,0,0,0.1)" }}
+                className="group relative overflow-hidden block border-r border-b"
+                style={{ borderColor: "rgba(255,255,255,0.07)" }}
               >
-                <div className="w-10 h-10 bg-brand-yellow rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 ">
-                  <i className={`${info.icon} text-black text-lg`} />
-                </div>
-                <div>
-                  <span
-                    className="text-xs font-mono tracking-[3px] text-brand-charcoal uppercase mb-1 block"
-                  >
-                    {info.title}
-                  </span>
-                  <p className="font-bold text-sm transition-colors duration-200 group-hover:text-brand-yellow" style={{ color: "#0f0f0f" }}>
-                    {i === 0 ? <span dir="ltr">{info.details}</span> : info.details}
+                <div className="absolute inset-0 bg-brand-yellow origin-left transition-transform duration-500 scale-x-0 group-hover:scale-x-100" />
+                <div className="relative z-10 px-10 py-14">
+                  <div className="text-brand-yellow group-hover:text-black transition-colors duration-300 mb-8">
+                    <i className={`${card.icon} text-3xl`} />
+                  </div>
+                  <h3 className="text-xl font-black text-white group-hover:text-black transition-colors duration-300 mb-4">
+                    {card.title}
+                  </h3>
+                  <p className="text-white group-hover:text-black/70 transition-colors duration-300 text-base leading-relaxed">
+                    {i === 0 ? <span dir="ltr">{card.details}</span> : card.details}
                   </p>
                 </div>
-              </motion.a>
+              </a>
             ))}
-            <div className="border-t" style={{ borderColor: "rgba(0,0,0,0.1)" }} />
+          </div>
+        </div>
+      </section>
+
+      {/* ── FORM SECTION ── */}
+      <section style={{ background: "#f7f6f2" }} className="relative overflow-hidden">
+        <div className="px-10 sm:px-14 lg:px-20 xl:px-28 py-24 lg:py-32">
+          <div className="grid lg:grid-cols-[1fr_1.6fr] gap-20 lg:gap-32">
+
+          {/* left: header */}
+          <div className="lg:pt-2">
+            <p className="text-sm font-bold tracking-[4px] uppercase font-mono text-brand-jet mb-6">
+              {badgeText || (isAr ? "تواصل معنا" : "GET IN TOUCH")}
+            </p>
+            <div className="w-10 h-0.5 bg-brand-yellow origin-left rounded-full mb-8" />
+            <h2
+              className="font-black leading-none tracking-tight text-black mb-8"
+              style={{ fontSize: "clamp(36px,5vw,72px)" }}
+            >
+              {headerTitle || t("contact_send_message_title")}
+            </h2>
+            <p className="text-black/90 text-base leading-relaxed">
+              {headerDesc || t("contact_fill_form_desc")}
+            </p>
           </div>
 
-          {/* Right: form */}
-          <motion.div
-            className="lg:w-3/5"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-          >
-            <p
-              className="text-xs font-mono tracking-[3px] uppercase mb-2"
-              style={{ color: "rgba(0,0,0,1)" }}
-            >
-              {formTitle}
-            </p>
-            {formDesc && (
-              <p className="text-sm mb-10 leading-relaxed" style={{ color: "rgba(0,0,0,1)" }}>
-                {formDesc}
-              </p>
-            )}
-
-            <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-x-10 gap-y-6 sm:gap-y-8">
-
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
-                  {t("name_required")}
+          {/* right: form */}
+          <form onSubmit={handleSubmit}>
+            <div className="grid md:grid-cols-2 gap-x-10 gap-y-10 mb-10">
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold tracking-[3px] uppercase font-mono text-black">
+                  {t("contact_full_name")}
                 </label>
                 <input
                   type="text" name="name" value={formData.name} onChange={handleChange} required
-                  className={inputClass}
-                  style={{ borderColor: "rgba(0,0,0,0.15)", color: "#0f0f0f" }}
-                  placeholder={data["Form Name Placeholder"]?.value || t("your_name_placeholder")}
+                  dir={isAr ? "rtl" : undefined}
+                  placeholder={data["Form Name Placeholder"]?.value || t("your_full_name")}
+                  className="bg-transparent border-b border-black/20 pb-3 text-black placeholder:text-black/30 focus:outline-none focus:border-black transition-colors text-base"
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
-                  {t("email_required")}
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold tracking-[3px] uppercase font-mono text-black">
+                  {t("contact_email_address")}
                 </label>
                 <input
                   type="email" name="email" value={formData.email} onChange={handleChange} required
-                  className={inputClass}
-                  style={{ borderColor: "rgba(0,0,0,0.15)", color: "#0f0f0f" }}
-                  placeholder={data["Form Email Placeholder"]?.value || t("your_email_placeholder")}
+                  dir={isAr ? "rtl" : undefined}
+                  placeholder={data["Form Email Placeholder"]?.value || t("your_email")}
+                  className="bg-transparent border-b border-black/20 pb-3 text-black placeholder:text-black/30 focus:outline-none focus:border-black transition-colors text-base"
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
-                  {t("phone_number")}
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold tracking-[3px] uppercase font-mono text-black">
+                  {t("contact_phone_number")}
                 </label>
                 <input
                   type="tel" name="phone" value={formData.phone} onChange={handleChange}
                   dir="ltr"
-                  className={`${inputClass}${isAr ? " text-right" : ""}`}
-                  style={{ borderColor: "rgba(0,0,0,0.15)", color: "#0f0f0f" }}
                   placeholder={data["Form Phone Placeholder"]?.value || "+96 XX XXX XXXX"}
+                  className={`bg-transparent border-b border-black/20 pb-3 text-black placeholder:text-black/30 focus:outline-none focus:border-black transition-colors text-base${isAr ? " text-right" : ""}`}
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
-                  {t("company_name")}
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold tracking-[3px] uppercase font-mono text-black">
+                  {t("contact_company_name")}
                 </label>
                 <input
                   type="text" name="company" value={formData.company} onChange={handleChange}
-                  className={inputClass}
-                  style={{ borderColor: "rgba(0,0,0,0.15)", color: "#0f0f0f" }}
-                  placeholder={data["Form Company Placeholder"]?.value || t("your_company_placeholder")}
+                  dir={isAr ? "rtl" : undefined}
+                  placeholder={data["Form Company Placeholder"]?.value || t("your_company")}
+                  className="bg-transparent border-b border-black/20 pb-3 text-black placeholder:text-black/30 focus:outline-none focus:border-black transition-colors text-base"
                 />
               </div>
+            </div>
 
-              <div className="md:col-span-2 flex flex-col gap-1">
-                <label className="text-xs font-mono tracking-[2px] uppercase" style={{ color: "rgba(0,0,0,1)" }}>
-                  {t("message_required")}
-                </label>
-                <textarea
-                  name="message" value={formData.message} onChange={handleChange} required rows={4}
-                  className={`${inputClass} resize-none`}
-                  style={{ borderColor: "rgba(0,0,0,0.15)", color: "#0f0f0f" }}
-                  placeholder={data["Form Message Placeholder"]?.value || t("tell_us_distribution_placeholder")}
-                />
+            <div className="flex flex-col gap-2 mb-10">
+              <label className="text-xs font-bold tracking-[3px] uppercase font-mono text-black">
+                {t("contact_message")}
+              </label>
+              <textarea
+                name="message" value={formData.message} onChange={handleChange} required
+                rows={4} maxLength={500}
+                dir={isAr ? "rtl" : undefined}
+                placeholder={data["Form Message Placeholder"]?.value || t("message_placeholder")}
+                className="bg-transparent border-b border-black/20 pb-3 text-black placeholder:text-black/30 focus:outline-none focus:border-black transition-colors text-base resize-none"
+              />
+              <p className="text-xs font-mono text-black/30 text-right">{formData.message.length}/500</p>
+            </div>
+
+            <div className="mb-10">
+              {RECAPTCHA_SITE_KEY && <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />}
+            </div>
+
+            {submitStatus === "success" && (
+              <div className="mb-8 border-l-2 border-brand-yellow pl-4 text-black/70 text-sm">
+                {t("thank_you_msg")}
               </div>
-
-              {submitStatus === "success" && (
-                <div
-                  className="md:col-span-2 px-5 py-4 text-sm font-medium rounded-lg"
-                  style={{ background: "rgba(0,180,80,0.08)", border: "1px solid rgba(0,180,80,0.3)", color: "rgb(0,140,60)" }}
-                >
-                  {t("thank_you_msg")}
-                </div>
-              )}
-              {submitStatus === "error" && (
-                <div
-                  className="md:col-span-2 px-5 py-4 text-sm font-medium rounded-lg"
-                  style={{ background: "rgba(200,0,0,0.06)", border: "1px solid rgba(200,0,0,0.25)", color: "rgb(180,0,0)" }}
-                >
-                  {t("error_msg")}
-                </div>
-              )}
-              {submitStatus === "recaptcha" && (
-                <div
-                  className="md:col-span-2 px-5 py-4 text-sm font-medium rounded-lg"
-                  style={{ background: "rgba(200,0,0,0.06)", border: "1px solid rgba(200,0,0,0.25)", color: "rgb(180,0,0)" }}
-                >
-                  Please complete the reCAPTCHA verification.
-                </div>
-              )}
-
-              <div className="md:col-span-2">
-                {RECAPTCHA_SITE_KEY && <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />}
+            )}
+            {submitStatus === "error" && (
+              <div className="mb-8 border-l-2 border-red-400 pl-4 text-red-700 text-sm">
+                {t("error_msg") || "Something went wrong. Please try again."}
               </div>
-
-              <div className="md:col-span-2 pt-2">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`circle-btn transition-opacity ${isSubmitting ? "opacity-40 pointer-events-none" : ""}`}
-                >
-                  <span className="circle-btn__wave" />
-                  <div className="circle-btn__content">
-                    <span className="circle-btn__label">
-                      {isSubmitting ? t("btn_submitting") : submitLabel}
-                    </span>
-                    <span className="circle-btn__icon">
-                      <svg width="14" height="14" viewBox="0 0 11 11" fill="none">
-                        <path d="M8.26615 4.79303L4.61493 1.00382L5.57863 -4.44968e-05L10.8587 5.49998L5.57863 11L4.61493 9.99614L8.26615 6.20692H0V4.79303H8.26615Z" fill="currentColor" />
-                      </svg>
-                    </span>
-                  </div>
-                </button>
+            )}
+            {submitStatus === "recaptcha" && (
+              <div className="mb-8 border-l-2 border-red-400 pl-4 text-red-700 text-sm">
+                {isAr ? "يرجى إكمال التحقق من reCAPTCHA" : "Please complete the reCAPTCHA verification."}
               </div>
+            )}
 
-            </form>
-          </motion.div>
+            <button
+              type="submit" disabled={isSubmitting}
+              className={`inline-flex items-center gap-6 group ${isSubmitting ? "opacity-50 pointer-events-none" : ""}`}
+            >
+              <span className="text-base font-black uppercase tracking-[2px] text-black group-hover:text-brand-charcoal cursor-pointer transition-colors duration-300">
+                {isSubmitting ? t("btn_submitting") : submitLabel}
+              </span>
+              <span className="w-12 h-12 rounded-full bg-brand-yellow flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="rtl:rotate-180">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </span>
+            </button>
+          </form>
 
         </div>
       </div>
     </section>
+    </div>
   );
 }
