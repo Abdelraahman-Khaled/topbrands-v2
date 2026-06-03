@@ -175,7 +175,7 @@ export default function WhoWeAre({ data }) {
 
         {/* ── RIGHT: full-bleed image ── */}
         {imageUrl && (
-          <div className="relative hidden lg:block overflow-hidden z-0">
+          <div className="relative h-72 sm:h-96 lg:h-auto overflow-hidden z-0">
             <motion.div
               className="absolute inset-x-0 w-full"
               style={{ y: imageY, top: "-15%", height: "130%" }}

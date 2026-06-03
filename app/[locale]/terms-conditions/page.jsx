@@ -7,14 +7,12 @@ export default function TermsConditions() {
   const { t } = useTranslation();
 
   const listSections = [
-    { titleKey: 'requirements_title', descKey: 'requirements_desc', itemPrefix: 'req_item', count: 6 },
-    { titleKey: 'orders_title',       descKey: 'orders_desc',       itemPrefix: 'ord_item', count: 6 },
-    { titleKey: 'pricing_title',      descKey: 'pricing_desc',      itemPrefix: 'prc_item', count: 6 },
-    { titleKey: 'quality_title',      descKey: 'quality_desc',      itemPrefix: 'qlt_item', count: 6 },
+    { titleKey: 'use_title',       descKey: 'use_desc',       itemPrefix: 'use_item', count: 5 },
+    { titleKey: 'copyright_title', descKey: 'copyright_desc', itemPrefix: 'cpy_item', count: 5 },
   ];
 
   const textSections = [
-    'ip', 'confidentiality', 'liability', 'termination', 'law', 'changes'
+    'ip', 'thirdparty', 'disclaimer', 'liability', 'changes', 'law'
   ];
 
   return (

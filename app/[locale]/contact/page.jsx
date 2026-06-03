@@ -409,7 +409,7 @@ export default function ContactPage() {
               {(isAr ? companyData?.address_ar : companyData?.address_en) || t("contact_damascus_syria")}
             </p>
           </div>
-          <div className="group w-full overflow-hidden rounded-sm" style={{ height: "480px" }}>
+          <div className="group w-full overflow-hidden rounded-sm h-72 sm:h-96 lg:h-[480px]">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3328.4!2d36.489023297392414!3d33.6193071287417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDM3JzA5LjUiTiAzNsKwMjknMjAuNSJF!5e0!3m2!1sen!2s!4v1"
               width="100%"

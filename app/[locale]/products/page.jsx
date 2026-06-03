@@ -139,7 +139,7 @@ function ProductsContent() {
             {filteredProducts.map((product) => (
               <StaggerItem key={product.id}>
                 <AnimatedCard className="h-full bg-white rounded-2xl overflow-hidden border-2 border-gray-100 cursor-pointer">
-                  <div className="relative w-full h-56 bg-brand-paleblue overflow-hidden">
+                  <div className="relative w-full h-44 sm:h-48 lg:h-56 bg-brand-paleblue overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.name}

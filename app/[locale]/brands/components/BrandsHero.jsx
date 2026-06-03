@@ -32,7 +32,7 @@ export default function BrandsHero({ data }) {
 
       {imageUrl && (
         <div className="absolute inset-0 z-0">
-          <img src={imageUrl} alt={title || "Brands"} className="w-full h-full" />
+          <img src={imageUrl} alt={title || "Brands"} className="w-full h-full object-cover object-center" />
         </div>
       )}
 

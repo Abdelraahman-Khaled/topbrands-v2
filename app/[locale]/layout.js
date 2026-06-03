@@ -46,6 +46,8 @@ export default async function RootLayout({ children, params }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        {/* Force light theme — site is not designed for device dark mode */}
+        <meta name="color-scheme" content="light" />
         {/* Google Tag Manager */}
         <Script
           id="gtm-script"

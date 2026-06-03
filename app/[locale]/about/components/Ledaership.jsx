@@ -49,7 +49,7 @@ const Ledaership = () => {
                             key={index}
                             className="group card-hover bg-white rounded-2xl overflow-hidden shadow-md border border-transparent"
                         >
-                            <div className="relative h-64 md:h-80 overflow-hidden">
+                            <div className="relative h-72 sm:h-80 md:h-80 lg:h-96 overflow-hidden">
                                 <img
                                     src={leader.image}
                                     alt={leader.name}

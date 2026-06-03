@@ -18,7 +18,7 @@ export default function MarketHero({ heroData, isAr }) {
 
       {imageUrl && (
         <div className="absolute inset-0 z-0">
-          <img src={imageUrl} alt={title || "Market Coverage"} className="w-full h-full " />
+          <img src={imageUrl} alt={title || "Market Coverage"} className="w-full h-full object-cover object-center" />
           <div className="absolute inset-0 bg-black/50" />
         </div>
       )}

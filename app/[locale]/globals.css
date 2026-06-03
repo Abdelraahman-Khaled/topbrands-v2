@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Site is intentionally a fixed light theme. Opt out of OS dark mode so
+     phone "Dark Mode" doesn't invert backgrounds/text or native form controls. */
+  color-scheme: light;
 }
 
 @theme inline {
@@ -16,13 +19,6 @@
   --color-brand-paleblue: #dee3eb;
   --color-brand-teal: #14b8a6;
   --color-brand-coral: #ff6b6b;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

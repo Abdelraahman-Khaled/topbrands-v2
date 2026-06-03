@@ -88,7 +88,7 @@ export default function BlogGrid({ blogs, locale, translations = {} }) {
                 className="group flex flex-col bg-white rounded-2xl overflow-hidden  border-2 border-gray-200 transition-all duration-300"
               >
                 {/* image */}
-                <div className="relative overflow-hidden z-10 bg-gray-50" style={{ height: "210px" }}>
+                <div className="relative overflow-hidden z-10 bg-gray-50 h-44 sm:h-48 md:h-52">
                   <img
                     src={post.photo}
                     alt={post.title}

@@ -51,34 +51,101 @@ export default function Hero({ data }) {
         ))}
         {/* yellow accent line */}
         <div
-          className={`absolute -top-[20%] ${isRtl ? 'left-[28%]' : 'right-[28%]'} w-1 h-[140%]`}
+          className={`absolute -top-[20%] ${isRtl ? 'left-[38%]' : 'right-[37%]'} w-1 h-[140%]`}
           style={{
             background:
-              "linear-gradient(180deg, #F7E32600 0%, #F7E32666 55%, #F7E32600 100%)",
+              "linear-gradient(180deg, #F7E32626 0%, #F7E32614 45%, #F7E32600 100%)",
             transform: `rotate(${isRtl ? '-15deg' : '15deg'})`,
           }}
         ></div>
       </div>
 
-      {/* Animated Syria map with governorate dots */}
+      {/* Decorative SVG dot grid (bottom corner, both EN & AR) */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className={`absolute top-[14%] ${isRtl ? 'left-[2%]' : 'right-[2%]'} w-[42%] max-w-[600px] z-0 hidden lg:block`}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 0.4, y: 0 }}
+        transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`absolute bottom-[0%] ${isRtl ? 'right-[0%]' : 'left-[0%]'} z-0 hidden lg:block pointer-events-none`}
       >
-        <SyriaMap className="w-full h-auto drop-shadow-[0_0_40px_rgba(247,227,38,0.18)]" />
+        <svg
+          width="176"
+          height="150"
+          viewBox="0 0 176 150"
+          fill="none"
+          aria-hidden="true"
+          className={isRtl ? 'scale-x-[-1]' : ''}
+        >
+          <defs>
+            <pattern id="hero-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+              <circle cx="2.5" cy="2.5" r="2.5" fill="#f7e326" />
+            </pattern>
+            <linearGradient id="hero-dots-fade" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stopColor="white" stopOpacity="1" />
+              <stop offset="100%" stopColor="white" stopOpacity="0" />
+            </linearGradient>
+            <mask id="hero-dots-mask">
+              <rect width="176" height="150" fill="url(#hero-dots-fade)" />
+            </mask>
+          </defs>
+          <rect width="176" height="150" fill="url(#hero-dots)" opacity="0.5" mask="url(#hero-dots-mask)" />
+        </svg>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 0.2, y: 0 }}
+        transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`absolute bottom-[20%] ${isRtl ? 'right-[0%]' : 'left-[0%]'} z-0 hidden lg:block pointer-events-none`}
+      >
+        <svg
+          width="176"
+          height="150"
+          viewBox="0 0 176 150"
+          fill="none"
+          aria-hidden="true"
+          className={isRtl ? 'scale-x-[-1]' : ''}
+        >
+          <defs>
+            <pattern id="hero-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+              <circle cx="2.5" cy="2.5" r="2.5" fill="#f7e326" />
+            </pattern>
+            <linearGradient id="hero-dots-fade" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stopColor="white" stopOpacity="1" />
+              <stop offset="100%" stopColor="white" stopOpacity="0" />
+            </linearGradient>
+            <mask id="hero-dots-mask">
+              <rect width="176" height="150" fill="url(#hero-dots-fade)" />
+            </mask>
+          </defs>
+          <rect width="176" height="150" fill="url(#hero-dots)" opacity="0.5" mask="url(#hero-dots-mask)" />
+        </svg>
       </motion.div>
 
-      {/* Big "tb" brand logo */}
-      <motion.img
-        src="/images/tb-mark.png"
-        alt="Top Brands"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`absolute bottom-[8%] ${isRtl ? 'left-[6%]' : 'right-[6%]'} w-[34%] max-w-[440px] z-0 hidden lg:block drop-shadow-[0_0_60px_rgba(247,227,38,0.35)]`}
-      />
+      {/* Map + truck group — kept together so they scale as one unit on any screen */}
+      <div
+        className={`absolute top-1/2 -translate-y-1/2 ${isRtl ? 'left-[2%]' : 'right-[2%]'} w-[42%] max-w-[680px] z-0 hidden lg:block pointer-events-none`}
+      >
+        <div className="relative w-full">
+          {/* Animated Syria map with governorate dots */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full"
+          >
+            <SyriaMap className="w-full h-auto drop-shadow-[0_0_45px_rgba(247,227,38,0.4)]" />
+          </motion.div>
+
+          {/* Truck overlapping the lower part of the map */}
+          <motion.img
+            src="/images/home/truck.webp"
+            alt="Top Brands"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute -bottom-[4%] left-1/2 -translate-x-1/2 w-[70%] drop-shadow-[0_0_60px_rgba(247,227,38,0.35)]"
+          />
+        </div>
+      </div>
 
       {/* Content */}
       <div className="relative flex z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-24 sm:py-32 text-start w-full md:mt-0 mt-4 mb-12">

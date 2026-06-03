@@ -63,7 +63,7 @@ export default function SyriaMap({ className = "" }) {
           </feMerge>
         </filter>
         <radialGradient id="syria-fill" cx="50%" cy="40%" r="75%">
-          <stop offset="0%" stopColor={YELLOW} stopOpacity="0.06" />
+          <stop offset="0%" stopColor={YELLOW} stopOpacity="0.12" />
           <stop offset="100%" stopColor={YELLOW} stopOpacity="0" />
         </radialGradient>
       </defs>
@@ -74,9 +74,9 @@ export default function SyriaMap({ className = "" }) {
           d={SYRIA_PATH}
           fill="url(#syria-fill)"
           stroke={YELLOW}
-          strokeWidth="14"
+          strokeWidth="20"
           strokeLinejoin="round"
-          strokeOpacity="0.85"
+          strokeOpacity="1"
           initial={reduceMotion ? false : { pathLength: 0, opacity: 0 }}
           animate={{ pathLength: 1, opacity: 1 }}
           transition={{ duration: 2.4, ease: "easeInOut" }}
@@ -89,7 +89,7 @@ export default function SyriaMap({ className = "" }) {
         fill="none"
         stroke={YELLOW}
         strokeWidth="1.5"
-        strokeOpacity="0.25"
+        strokeOpacity="0.4"
         strokeDasharray="4 6"
         initial={reduceMotion ? false : { pathLength: 0 }}
         animate={{ pathLength: 1 }}
