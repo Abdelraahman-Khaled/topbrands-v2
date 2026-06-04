@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Lightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
@@ -11,41 +11,79 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/counter.css";
 import { staggerContainerVariants, staggerItemVariants } from "../../lib/animations";
+import { getGallery } from "@/services/gallery.service";
 
-const categories = {
-  en: ["All", "Events", "Operations", "Team", "Products"],
-  ar: ["الكل", "فعاليات", "عمليات", "الفريق", "منتجات"],
+// API category slug → localized display label
+const CATEGORY_LABELS = {
+  operation: { en: "Operations", ar: "عمليات" },
+  event: { en: "Events", ar: "فعاليات" },
+  team: { en: "Team", ar: "الفريق" },
+  product: { en: "Products", ar: "منتجات" },
 };
 
-const categoryKeyMap = { All: "All", Events: "Events", Operations: "Operations", Team: "Team", Products: "Products" };
-const categoryArMap  = { All: "الكل", Events: "فعاليات", Operations: "عمليات", Team: "الفريق", Products: "منتجات" };
+const labelFor = (slug, isAr) =>
+  CATEGORY_LABELS[slug]?.[isAr ? "ar" : "en"] ??
+  (slug ? slug.charAt(0).toUpperCase() + slug.slice(1) : "");
 
-const galleries = [
-  { id: 1, title_en: "Brand Launch Event",   title_ar: "حفل إطلاق العلامة التجارية",  description_en: "Annual brand launch ceremony with key partners",  description_ar: "حفل إطلاق سنوي للعلامات التجارية مع الشركاء الرئيسيين",  category: "Events",     src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=90" },
-  { id: 2, title_en: "Distribution Center",  title_ar: "مركز التوزيع",                description_en: "State-of-the-art warehousing and logistics hub",  description_ar: "مستودعات وخدمات لوجستية على أحدث مستوى",                category: "Operations", src: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&q=90" },
-  { id: 3, title_en: "Team Meeting",         title_ar: "اجتماع الفريق",              description_en: "Weekly strategy sessions with our expert team",    description_ar: "جلسات استراتيجية أسبوعية مع فريق الخبراء",              category: "Team",       src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=90" },
-  { id: 4, title_en: "Product Showcase",     title_ar: "عرض المنتجات",               description_en: "Highlighting our extensive FMCG product range",    description_ar: "إبراز مجموعتنا الواسعة من منتجات السلع الاستهلاكية",    category: "Products",   src: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=90" },
-  { id: 5, title_en: "Logistics Operations", title_ar: "العمليات اللوجستية",         description_en: "Efficient last-mile delivery across all regions",   description_ar: "توصيل فعّال للمرحلة الأخيرة في جميع المناطق",           category: "Operations", src: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=1200&q=90" },
-  { id: 6, title_en: "Market Coverage",      title_ar: "تغطية السوق",                description_en: "Nationwide reach spanning 14 governorates",         description_ar: "تغطية وطنية تمتد عبر 14 محافظة",                        category: "Events",     src: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=90" },
-  { id: 7, title_en: "Partner Conference",   title_ar: "مؤتمر الشركاء",             description_en: "Connecting with global brand partners",              description_ar: "التواصل مع شركاء العلامات التجارية العالميين",           category: "Events",     src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1200&q=90" },
-  { id: 8, title_en: "Warehouse Facility",   title_ar: "منشأة المستودعات",           description_en: "Modern storage solutions for all product lines",    description_ar: "حلول تخزين حديثة لجميع خطوط الإنتاج",                  category: "Operations", src: "https://images.unsplash.com/photo-1565891741441-64926e441838?w=1200&q=90" },
-  { id: 9, title_en: "Sales Excellence",     title_ar: "التميز في المبيعات",         description_en: "Celebrating top-performing sales milestones",        description_ar: "الاحتفاء بأبرز إنجازات المبيعات",                       category: "Team",       src: "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1200&q=90" },
-];
-
-export default function GalleryGrid({ locale }) {
+export default function GalleryGrid({ locale, galleries = [], badge, heading }) {
   const isAr = locale === "ar";
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("all");
   const [open, setOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [slides, setSlides] = useState([]);
+  const [loadingId, setLoadingId] = useState(null);
 
-  const currentCategories = isAr ? categories.ar : categories.en;
-  const categoryKeys = categories.en;
+  // Unique category slugs actually present in the data, in first-seen order
+  const presentCategories = useMemo(() => {
+    const seen = [];
+    for (const g of galleries) {
+      if (g.category && !seen.includes(g.category)) seen.push(g.category);
+    }
+    return seen;
+  }, [galleries]);
 
-  const filtered = activeCategory === "All"
-    ? galleries
-    : galleries.filter((g) => g.category === activeCategory);
+  const filtered =
+    activeCategory === "all"
+      ? galleries
+      : galleries.filter((g) => g.category === activeCategory);
 
-  const openAt = (i) => { setLightboxIndex(i); setOpen(true); };
+  // The API localizes via the `locale` header → returns single `title`/`alt`.
+  // Fall back to the *_ar/*_en pair in case a raw (header-less) payload is used.
+  const titleOf = (g) =>
+    g.title || (isAr ? g.title_ar : g.title_en) || g.title_en || g.title_ar || "";
+  const altOf = (p) =>
+    p?.alt || (isAr ? p?.alt_ar : p?.alt_en) || "";
+
+  const openAlbum = async (gallery) => {
+    if (loadingId) return;
+
+    let photos = [];
+    if (gallery.photos_count > 1) {
+      // Album with multiple photos — fetch the full set
+      setLoadingId(gallery.id);
+      const full = await getGallery(gallery.id, locale);
+      setLoadingId(null);
+      photos = full?.photos?.length
+        ? full.photos
+        : gallery.main_photo
+          ? [gallery.main_photo]
+          : [];
+    } else if (gallery.main_photo) {
+      photos = [gallery.main_photo];
+    }
+
+    if (!photos.length) return;
+
+    setSlides(
+      photos.map((p) => ({
+        src: p.url,
+        title: titleOf(gallery),
+        description: altOf(p),
+      })),
+    );
+    setLightboxIndex(0);
+    setOpen(true);
+  };
 
   return (
     <>
@@ -57,93 +95,132 @@ export default function GalleryGrid({ locale }) {
             <div>
               <span className="text-xs font-bold tracking-widest text-brand-charcoal uppercase mb-3 flex items-center gap-2">
                 <span className="inline-block w-6 h-px bg-brand-yellow" />
-                {isAr ? "معرض الصور" : "Photo Gallery"}
+                {badge || (isAr ? "معرض الصور" : "Photo Gallery")}
               </span>
               <h2 className="text-4xl md:text-5xl font-bold text-brand-jet leading-tight">
-                {isAr ? "لحظاتنا المميزة" : "Our Moments"}
+                {heading || (isAr ? "لحظاتنا المميزة" : "Our Moments")}
               </h2>
             </div>
             <p className="text-brand-charcoal text-sm font-medium">
               {isAr
-                ? `عرض ${filtered.length} صورة`
-                : `${filtered.length} ${activeCategory === "All" ? "" : activeCategory} photo${filtered.length !== 1 ? "s" : ""}`}
+                ? `عرض ${filtered.length} ألبوم`
+                : `${filtered.length} album${filtered.length !== 1 ? "s" : ""}`}
             </p>
           </div>
 
-          {/* Category filter */}
-          <div className="flex flex-wrap gap-2 mb-10">
-            {categoryKeys.map((key, i) => (
+          {/* Category filter — dynamic from data */}
+          {presentCategories.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-10">
               <button
-                key={key}
-                onClick={() => setActiveCategory(key)}
+                onClick={() => setActiveCategory("all")}
                 className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 cursor-pointer ${
-                  activeCategory === key
+                  activeCategory === "all"
                     ? "bg-brand-jet text-white shadow-lg"
                     : "bg-white text-brand-charcoal hover:bg-brand-yellow hover:text-brand-jet"
                 }`}
               >
-                {currentCategories[i]}
+                {isAr ? "الكل" : "All"}
               </button>
-            ))}
-          </div>
-
-          {/* Uniform grid */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCategory}
-              variants={staggerContainerVariants}
-              initial="hidden"
-              animate="visible"
-              exit={{ opacity: 0, transition: { duration: 0.15 } }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-            >
-              {filtered.map((item, i) => (
-                <motion.div
-                  key={item.id}
-                  variants={staggerItemVariants}
-                  onClick={() => openAt(i)}
-                  className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white shadow-sm aspect-[4/3]"
+              {presentCategories.map((slug) => (
+                <button
+                  key={slug}
+                  onClick={() => setActiveCategory(slug)}
+                  className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 cursor-pointer ${
+                    activeCategory === slug
+                      ? "bg-brand-jet text-white shadow-lg"
+                      : "bg-white text-brand-charcoal hover:bg-brand-yellow hover:text-brand-jet"
+                  }`}
                 >
-                  <img
-                    src={item.src.replace("w=1200", "w=800")}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] "
-                  />
-
-                  {/* Permanent bottom gradient */}
-                  <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/10 to-transparent" />
-
-                  {/* Category chip */}
-                  <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm text-white text-xs font-semibold">
-                    {isAr ? categoryArMap[item.category] : item.category}
-                  </span>
-
-                  {/* Expand button */}
-                  <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-brand-jet">
-                      <polyline points="15 3 21 3 21 9" />
-                      <polyline points="9 21 3 21 3 15" />
-                      <line x1="21" y1="3" x2="14" y2="10" />
-                      <line x1="3" y1="21" x2="10" y2="14" />
-                    </svg>
-                  </div>
-
-                  {/* Title */}
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <h3 className="text-white font-bold text-base leading-snug drop-shadow">
-                      {isAr ? item.title_ar : item.title_en}
-                    </h3>
-                    <div className="flex items-center gap-2 mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span className="w-4 h-px bg-brand-yellow" />
-                      <span className="text-brand-yellow text-xs font-semibold tracking-wide uppercase">
-                        {isAr ? "عرض" : "View photo"}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
+                  {labelFor(slug, isAr)}
+                </button>
               ))}
-            </motion.div>
-          </AnimatePresence>
+            </div>
+          )}
+
+          {/* Empty state */}
+          {filtered.length === 0 ? (
+            <div className="py-24 text-center">
+              <p className="text-brand-charcoal text-lg font-medium">
+                {isAr ? "لا توجد صور لعرضها حالياً." : "No photos to display yet."}
+              </p>
+            </div>
+          ) : (
+            /* Uniform grid */
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeCategory}
+                variants={staggerContainerVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+              >
+                {filtered.map((gallery) => (
+                  <motion.div
+                    key={gallery.id}
+                    variants={staggerItemVariants}
+                    onClick={() => openAlbum(gallery)}
+                    className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white shadow-sm aspect-[4/3]"
+                  >
+                    <img
+                      src={gallery.main_photo?.url}
+                      alt={titleOf(gallery)}
+                      className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] "
+                    />
+
+                    {/* Permanent bottom gradient */}
+                    <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/10 to-transparent" />
+
+                    {/* Category chip */}
+                    {gallery.category && (
+                      <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm text-white text-xs font-semibold">
+                        {labelFor(gallery.category, isAr)}
+                      </span>
+                    )}
+
+                    {/* Photos count badge */}
+                    {gallery.photos_count > 1 && (
+                      <span className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm text-white text-xs font-semibold opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                          <circle cx="8.5" cy="8.5" r="1.5" />
+                          <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                        {gallery.photos_count}
+                      </span>
+                    )}
+
+                    {/* Expand button / loading spinner */}
+                    <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-300">
+                      {loadingId === gallery.id ? (
+                        <span className="w-4 h-4 rounded-full border-2 border-brand-jet/30 border-t-brand-jet animate-spin" />
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-brand-jet">
+                          <polyline points="15 3 21 3 21 9" />
+                          <polyline points="9 21 3 21 3 15" />
+                          <line x1="21" y1="3" x2="14" y2="10" />
+                          <line x1="3" y1="21" x2="10" y2="14" />
+                        </svg>
+                      )}
+                    </div>
+
+                    {/* Title */}
+                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <h3 className="text-white font-bold text-base leading-snug drop-shadow">
+                        {titleOf(gallery)}
+                      </h3>
+                      <div className="flex items-center gap-2 mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span className="w-4 h-px bg-brand-yellow" />
+                        <span className="text-brand-yellow text-xs font-semibold tracking-wide uppercase">
+                          {isAr ? "عرض الألبوم" : "View album"}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          )}
         </div>
       </section>
 
@@ -152,7 +229,7 @@ export default function GalleryGrid({ locale }) {
         open={open}
         close={() => setOpen(false)}
         index={lightboxIndex}
-        slides={filtered.map((g) => ({ src: g.src, title: isAr ? g.title_ar : g.title_en, description: isAr ? g.description_ar : g.description_en }))}
+        slides={slides}
         on={{ view: ({ index: i }) => setLightboxIndex(i) }}
         plugins={[Counter, Captions, Thumbnails]}
         counter={{ container: { style: { top: "unset", bottom: 16, left: 16, right: "unset", color: "#f7e326", fontWeight: 700, fontSize: 13 } } }}
