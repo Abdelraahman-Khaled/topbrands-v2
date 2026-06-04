@@ -1,9 +1,12 @@
 import nodemailer from 'nodemailer';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
-  secure: true,
+  secure: Number(process.env.SMTP_PORT) === 465,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -25,6 +28,13 @@ async function verifyRecaptcha(token) {
 
 export async function POST(request) {
   try {
+    const missing = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'RECAPTCHA_SECRET_KEY']
+      .filter((k) => !process.env[k]);
+    if (missing.length) {
+      console.error('Contact mail error: missing env vars:', missing.join(', '));
+      return Response.json({ ok: false, error: `Server not configured (missing: ${missing.join(', ')})` }, { status: 500 });
+    }
+
     const { name, email, phone, company, subject, message, recaptchaToken } = await request.json();
 
     if (!recaptchaToken || !(await verifyRecaptcha(recaptchaToken))) {
@@ -52,6 +62,9 @@ export async function POST(request) {
     return Response.json({ ok: true });
   } catch (err) {
     console.error('Contact mail error:', err);
-    return Response.json({ ok: false }, { status: 500 });
+    return Response.json(
+      { ok: false, error: err?.message || 'Unknown error', code: err?.code },
+      { status: 500 }
+    );
   }
 }
