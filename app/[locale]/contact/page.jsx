@@ -117,6 +117,11 @@ export default function ContactPage() {
     }
   };
 
+  const handleSendAnother = () => {
+    setFormData({ name: "", email: "", phone: "", company: "", subject: "", message: "" });
+    setSubmitStatus("idle");
+  };
+
   const infoCards = [
     {
       label: t("contact_phone"),
@@ -278,6 +283,54 @@ export default function ContactPage() {
             </div>
 
             {/* right: form */}
+            {submitStatus === "success" ? (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex flex-col items-start lg:pt-2"
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.1 }}
+                  className="w-20 h-20 rounded-full bg-brand-yellow flex items-center justify-center mb-8"
+                >
+                  <motion.svg
+                    width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ delay: 0.3, duration: 0.4 }}
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </motion.svg>
+                </motion.div>
+                <h3
+                  className="font-black leading-none tracking-tight text-black mb-5"
+                  style={{ fontSize: "clamp(28px,3.5vw,48px)" }}
+                >
+                  {t("contact_success_title")}
+                </h3>
+                <p className="text-black/70 text-base leading-relaxed max-w-md mb-10">
+                  {t("contact_success_desc")}
+                </p>
+                <button
+                  type="button"
+                  onClick={handleSendAnother}
+                  className="inline-flex items-center gap-6 group"
+                >
+                  <span className="text-base font-black uppercase tracking-[2px] text-black group-hover:text-brand-charcoal cursor-pointer transition-colors duration-300">
+                    {t("contact_send_another")}
+                  </span>
+                  <span className="w-12 h-12 rounded-full bg-brand-yellow flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" className="rtl:rotate-180">
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                  </span>
+                </button>
+              </motion.div>
+            ) : (
             <form onSubmit={handleSubmit}>
               <div className="grid md:grid-cols-2 gap-x-10 gap-y-10 mb-10">
                 <div className="flex flex-col gap-2">
@@ -362,11 +415,6 @@ export default function ContactPage() {
                 {RECAPTCHA_SITE_KEY && <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} />}
               </div>
 
-              {submitStatus === "success" && (
-                <div className="mb-8 border-l-2 border-brand-yellow pl-4 text-black/70 text-sm">
-                  {t("thank_you_msg")}
-                </div>
-              )}
               {submitStatus === "error" && (
                 <div className="mb-8 border-l-2 border-red-400 pl-4 text-red-700 text-sm">
                   {t("error_msg") || "Something went wrong. Please try again."}
@@ -393,6 +441,7 @@ export default function ContactPage() {
                 </span>
               </button>
             </form>
+            )}
           </div>
         </div>
       </section>

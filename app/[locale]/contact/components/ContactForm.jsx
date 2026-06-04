@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { Check } from 'lucide-react';
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
@@ -47,7 +48,6 @@ const ContactForm = () => {
 
             if (response.ok) {
                 setSubmitStatus("success");
-                setFormData({ name: "", email: "", phone: "", company: "", subject: "", message: "" });
                 recaptchaRef.current?.reset();
             } else {
                 setSubmitStatus("error");
@@ -59,9 +59,54 @@ const ContactForm = () => {
         }
     };
 
+    const handleSendAnother = () => {
+        setFormData({ name: "", email: "", phone: "", company: "", subject: "", message: "" });
+        setSubmitStatus("idle");
+    };
+
     return (
         <div className="max-w-4xl mx-auto bg-brand-paleblue p-8 lg:p-12 rounded-[40px] shadow-sm">
+            <AnimatePresence mode="wait">
+            {submitStatus === "success" ? (
+                <motion.div
+                    key="success"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="flex flex-col items-center text-center py-10 lg:py-16"
+                >
+                    <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.1 }}
+                        className="w-24 h-24 rounded-full bg-brand-yellow flex items-center justify-center mb-6 shadow-md"
+                    >
+                        <motion.div
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.35, duration: 0.25 }}
+                        >
+                            <Check className="w-12 h-12 text-brand-charcoal" strokeWidth={3} />
+                        </motion.div>
+                    </motion.div>
+                    <h3 className="text-2xl lg:text-3xl font-bold text-brand-charcoal mb-3">
+                        {t("contact_success_title")}
+                    </h3>
+                    <p className="text-base text-brand-charcoal/70 max-w-md mb-8">
+                        {t("contact_success_desc")}
+                    </p>
+                    <button
+                        type="button"
+                        onClick={handleSendAnother}
+                        className="mask-btn mask-btn--yellow-black !rounded-xl"
+                    >
+                        <span className="mask-btn__label bg-transparent">{t("contact_send_another")}</span>
+                        <span className="mask-btn__fill bg-transparent">{t("contact_send_another")}</span>
+                    </button>
+                </motion.div>
+            ) : (
             <motion.form
+                key="form"
                 onSubmit={handleSubmit}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -147,9 +192,6 @@ const ContactForm = () => {
                         placeholder={t("message_placeholder")}
                     ></textarea>
                     <div className="flex justify-between items-center mt-1">
-                        {submitStatus === "success" && (
-                            <p className="text-sm text-green-600 font-semibold">{t("thank_you_msg")}</p>
-                        )}
                         {submitStatus === "error" && (
                             <p className="text-sm text-red-500 font-semibold">{t("error_msg") || "Something went wrong"}</p>
                         )}
@@ -177,6 +219,8 @@ const ContactForm = () => {
                     </span>
                 </button>
             </motion.form>
+            )}
+            </AnimatePresence>
         </div>
     );
 };
