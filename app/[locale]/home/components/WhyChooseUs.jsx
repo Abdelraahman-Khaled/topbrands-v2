@@ -107,7 +107,7 @@ export default function WhyChooseUs({ data }) {
           <h3 className="font-black text-white leading-tight mb-4" style={{ fontSize: "clamp(1.6rem, 6vw, 2rem)" }}>
             {panel.title}
           </h3>
-          <p className="text-sm leading-relaxed" >
+          <p className="text-sm leading-relaxed text-white/80" >
             {panel.desc}
           </p>
         </motion.div>
@@ -193,7 +193,7 @@ export default function WhyChooseUs({ data }) {
                 </h2>
 
                 <p
-                  className="text-base lg:text-lg leading-relaxed max-w-xl"
+                  className="text-base lg:text-lg leading-relaxed max-w-xl text-white/80"
                 >
                   {panel.desc}
                 </p>

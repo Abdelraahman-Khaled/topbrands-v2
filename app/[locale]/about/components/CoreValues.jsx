@@ -71,7 +71,7 @@ export default function CoreValues({ data }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base lg:text-lg leading-relaxed lg:max-w-xs"
+              className="text-base lg:text-lg leading-relaxed lg:max-w-xs text-white/80"
             >
               {headerSubtitle}
             </motion.p>

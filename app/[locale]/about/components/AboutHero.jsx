@@ -72,7 +72,7 @@ export default function AboutHero({ data }) {
           >
             {desc1 && <span className="text-white/90">{desc1} </span>}
             {yellowText && <span className="font-bold text-brand-yellow">{yellowText} </span>}
-            {desc2 && <span>{desc2}</span>}
+            {desc2 && <span className="text-white/90">{desc2}</span>}
           </motion.p>
         )}
 

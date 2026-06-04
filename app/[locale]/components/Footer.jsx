@@ -159,7 +159,7 @@ export default function Footer() {
 
         {/* ── Bottom bar: copyright + socials ── */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-5 pt-8">
-          <p className="text-xs font-mono" >
+          <p className="text-xs font-mono text-white/60" >
             © {new Date().getFullYear()} Top Brands Syria. {t("all_rights_reserved")}.
           </p>
 

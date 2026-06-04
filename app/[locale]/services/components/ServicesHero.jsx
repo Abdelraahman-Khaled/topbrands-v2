@@ -71,7 +71,7 @@ export default function ServicesHero({ data }) {
           >
             {descPart1 && <span className="text-white/90">{descPart1} </span>}
             {yellowSub && <span className="font-bold text-brand-yellow">{yellowSub} </span>}
-            {descPart2 && <span>{descPart2}</span>}
+            {descPart2 && <span className="text-white/90">{descPart2}</span>}
           </motion.p>
         )}
 

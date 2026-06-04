@@ -39,7 +39,7 @@ export default function MarketChannels({ channelsData, channels, isAr }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base lg:text-lg leading-relaxed lg:max-w-xs"
+              className="text-base lg:text-lg leading-relaxed lg:max-w-xs text-white/80"
             >
               {channelsData["Element 2"].value}
             </motion.p>

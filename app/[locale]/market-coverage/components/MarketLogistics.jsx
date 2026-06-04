@@ -47,7 +47,7 @@ export default function MarketLogistics({ logisticsData, logisticsPoints, isAr }
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.18 }}
-            className="text-base leading-relaxed mb-12"
+            className="text-base leading-relaxed mb-12 text-white/80"
           >
             {logisticsData["Text Element 2"]?.value}
           </motion.p>
@@ -71,7 +71,7 @@ export default function MarketLogistics({ logisticsData, logisticsPoints, isAr }
                 </span>
                 <div>
                   <h4 className="font-black text-white text-lg mb-1">{pt.title}</h4>
-                  <p className="text-base leading-relaxed" >{pt.desc}</p>
+                  <p className="text-base leading-relaxed text-white/70" >{pt.desc}</p>
                 </div>
               </motion.div>
             ))}
