@@ -820,24 +820,11 @@ section[id="why-choose-us"] {
   min-height: 100vh;
 }
 
-/* ── Arabic line-height overrides ──
-   Arabic glyphs have taller ascenders, deeper descenders, and stacked tashkeel
-   (e.g. the tanween in "معاً"). Tight Latin line-heights clip them — especially
-   inside the hero `overflow-hidden` reveal masks. Loosen tight leadings for AR. */
+/* ── Arabic leading-none override ── */
 @layer utilities {
   :lang(ar) .leading-none,
   .leading-none:lang(ar) {
     line-height: 1.4 !important;
-  }
-
-  :lang(ar) .leading-tight,
-  .leading-tight:lang(ar) {
-    line-height: 1.5 !important;
-  }
-
-  :lang(ar) .leading-snug,
-  .leading-snug:lang(ar) {
-    line-height: 1.6 !important;
   }
 }
 
@@ -845,10 +832,11 @@ section[id="why-choose-us"] {
   line-height: 1.2 !important;
 }
 
-/* Headline reveal masks (overflow-hidden + pt-2/-mt-2) only pad the top, which
-   clips Arabic descenders at the bottom. Give them matching bottom room for AR;
-   the negative margin keeps layout position unchanged. */
-:lang(ar) .overflow-hidden.pt-2 {
-  padding-bottom: 0.5rem;
-  margin-bottom: -0.5rem;
+/* ── Arabic letter-spacing reset ──
+   Arabic is a cursive script — its letters join with thin connecting strokes.
+   Any letter-spacing (e.g. `tracking-[4px]`, `tracking-tight`, `tracking-widest`)
+   breaks those joins, so words look "cut"/disconnected, badly so on mobile.
+   Force normal spacing for all Arabic text, overriding any tracking-* utility. */
+:lang(ar) {
+  letter-spacing: normal !important;
 }

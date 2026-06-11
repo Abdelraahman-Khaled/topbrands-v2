@@ -14,15 +14,12 @@ export const pageTransitionVariants = {
 };
 
 // 2. Hero Sections & Typography (Liquid Text Reveal)
-// NOTE: This is a pure 2D vertical reveal. Do NOT add `rotateX`/3D transforms —
-// a 3D transform forces the headline into a GPU texture layer, and mobile GPUs
-// downsample that texture, dropping the thin strokes that join Arabic letters
-// (cursive script) so the word renders "broken" / disconnected on phones.
 export const headlineRevealVariants = {
-  hidden: { y: "110%", opacity: 0 },
+  hidden: { y: "110%", opacity: 0, rotateX: 15 },
   visible: {
     y: "0%",
     opacity: 1,
+    rotateX: 0,
     transition: {
       duration: 1.2,
       ease: [0.25, 1, 0.5, 1],
