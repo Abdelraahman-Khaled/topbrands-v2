@@ -38,13 +38,9 @@ const ProductCard = ({ product, index, isAr }) => {
           {title}
         </h3>
 
-        {description ? (
+        {description && (
           <p className="text-sm leading-relaxed line-clamp-3 text-gray-500 transition-colors duration-300">
             {description}
-          </p>
-        ) : (
-          <p className="text-sm text-gray-400 transition-colors duration-300">
-            {isAr ? "وصف المنتج سيتوفر قريباً..." : "Description coming soon..."}
           </p>
         )}
 
