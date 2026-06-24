@@ -28,12 +28,17 @@ export default function SmoothScroll() {
       });
 
       gsap.ticker.lagSmoothing(0);
+
+      // Expose the instance so components can scroll through Lenis instead of
+      // fighting it with native scrollIntoView / window.scrollTo.
+      window.lenis = lenis;
     };
 
     init();
 
     return () => {
       if (lenis) lenis.destroy();
+      if (window.lenis) delete window.lenis;
     };
   }, []);
 

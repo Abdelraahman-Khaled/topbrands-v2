@@ -1,6 +1,9 @@
 "use client";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+
+const PER_PAGE = 9;
 
 const ProductCard = ({ product, index, isAr }) => {
   const title = product.title;
@@ -60,10 +63,58 @@ export default function BrandProducts({ products, brandTitle }) {
   const { i18n } = useTranslation();
   const isAr = i18n.language === "ar";
 
+  const [page, setPage] = useState(1);
+  const sectionRef = useRef(null);
+  const didMount = useRef(false);
+
+  // Scroll to the top of the products section AFTER the new page has rendered,
+  // so the layout is settled and the scroll isn't cancelled mid-flight by the
+  // height change (which broke scrolling on the shorter last pages).
+  // The site uses Lenis smooth scroll, so we must scroll through its API —
+  // native scrollIntoView/window.scrollTo fight Lenis and land in the wrong spot.
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+    const raf = requestAnimationFrame(() => {
+      const el = sectionRef.current;
+      if (!el) return;
+      const lenis = typeof window !== "undefined" ? window.lenis : null;
+      if (lenis) {
+        // Negative offset leaves room for the fixed navbar (~80px tall).
+        lenis.scrollTo(el, { offset: -100, duration: 1 });
+      } else {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [page]);
+
   if (!products?.length) return null;
 
+  const totalPages = Math.max(1, Math.ceil(products.length / PER_PAGE));
+  const paginated = products.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+  const goToPage = (next) => {
+    setPage((prev) => {
+      const clamped = Math.min(totalPages, Math.max(1, next));
+      return clamped === prev ? prev : clamped;
+    });
+  };
+
+  const paginationPages = () => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    const arr = [1];
+    if (page > 3) arr.push("…");
+    for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) arr.push(i);
+    if (page < totalPages - 2) arr.push("…");
+    arr.push(totalPages);
+    return arr;
+  };
+
   return (
-    <section className="relative overflow-hidden" style={{ background: "#f7f6f2" }}>
+    <section ref={sectionRef} className="relative overflow-hidden scroll-mt-24" style={{ background: "#f7f6f2" }}>
 
       {/* Faint watermark */}
       <span
@@ -110,11 +161,55 @@ export default function BrandProducts({ products, brandTitle }) {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product, i) => (
+        <motion.div
+          key={page}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {paginated.map((product, i) => (
             <ProductCard key={product.id} product={product} index={i} isAr={isAr} />
           ))}
-        </div>
+        </motion.div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-1 mt-16">
+            <button
+              onClick={() => goToPage(page - 1)}
+              disabled={page === 1}
+              aria-label={isAr ? "الصفحة السابقة" : "Previous page"}
+              className="w-10 h-10 flex items-center justify-center border border-black/12 hover:border-black transition-colors disabled:opacity-20"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="rtl:rotate-180"><path d="M7.5 2L3.5 6L7.5 10" stroke="black" strokeWidth="1.5" /></svg>
+            </button>
+
+            {paginationPages().map((num, i) =>
+              num === "…" ? (
+                <span key={"e" + i} className="w-10 h-10 flex items-center justify-center text-black/25 text-sm">…</span>
+              ) : (
+                <button
+                  key={num}
+                  onClick={() => goToPage(num)}
+                  className={`w-10 h-10 flex items-center justify-center text-sm font-black transition-colors duration-200 ${page === num ? "bg-brand-yellow text-black" : "text-black/35 hover:text-black"
+                    }`}
+                >
+                  {num}
+                </button>
+              )
+            )}
+
+            <button
+              onClick={() => goToPage(page + 1)}
+              disabled={page === totalPages}
+              aria-label={isAr ? "الصفحة التالية" : "Next page"}
+              className="w-10 h-10 flex items-center justify-center border border-black/12 hover:border-black transition-colors disabled:opacity-20"
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="rtl:rotate-180"><path d="M4.5 2L8.5 6L4.5 10" stroke="black" strokeWidth="1.5" /></svg>
+            </button>
+          </div>
+        )}
 
       </div>
     </section>
